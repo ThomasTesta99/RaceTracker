@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Rajdhani } from "next/font/google";
+import { Inter, Rajdhani, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,7 +29,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${rajdhani.variable} h-full`}
+      className={cn("h-full", inter.variable, rajdhani.variable, "font-sans", geist.variable)}
     >
       <body className="min-h-screen flex flex-col font-sans text-white">
         {children}

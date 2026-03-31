@@ -1,5 +1,7 @@
 // import { RaceData } from "@/types";
 
+import { BarChart2Icon, FilePlus2Icon, FileSpreadsheetIcon, HomeIcon } from "lucide-react";
+
 // export const SOURCES = [
 //     {
 //         id: 1,
@@ -67,3 +69,26 @@
 //         },
 //     ],
 // };
+
+export const sidebarLinks = [
+    {
+        icon: HomeIcon, 
+        route: '/', 
+        label: 'Home', 
+    },
+    {
+        icon: FilePlus2Icon, 
+        route: '/new-race-sheet', 
+        label: 'Create New Race Sheet', 
+    },
+    {
+        icon: FileSpreadsheetIcon,
+        route: '/race-sheets', 
+        label: 'Race Sheets', 
+    },
+    {
+        icon: BarChart2Icon, 
+        route: '/metrics', 
+        label: 'Metrics', 
+    },
+]

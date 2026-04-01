@@ -13,3 +13,24 @@ export type NewRace = typeof races.$inferInsert;
 
 export type Source = typeof sources.$inferSelect;
 export type NewSource = typeof sources.$inferInsert;
+
+export type GetRaceDayResponse =
+  | {
+      success: true;
+      raceDay: RaceDay;
+    }
+  | {
+      success: false;
+      message: string;
+    };
+
+export type GetRaceDaysResponse =
+  | {
+      success: true;
+      raceList: RaceDay[];
+    }
+  | {
+      success: false;
+      message: string;
+      raceList?: RaceDay[];
+    };

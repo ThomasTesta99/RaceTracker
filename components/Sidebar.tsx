@@ -15,7 +15,7 @@ const Sidebar = () => {
     <section
       className={cn(
         "h-screen overflow-hidden border-r border-white/10 bg-black/40 backdrop-blur-xl transition-all duration-300",
-        open ? "w-[280px]" : "w-[80px]"
+        open ? "w-[320px]" : "w-[80px]"
       )}
     >
       <div className="flex h-full flex-col p-4">
@@ -23,7 +23,7 @@ const Sidebar = () => {
           {open && (
             <Link
               href="/"
-              className="min-w-0 rounded-xl px-2 py-1 transition hover:bg-white/5"
+              className="min-w-0 rounded-xl px-2 py-1 transition hover:bg-white/5 curos"
             >
               <h1 className="font-heading whitespace-nowrap text-2xl font-bold tracking-wide text-white">
                 TMT&apos;s RaceTracker
@@ -34,7 +34,7 @@ const Sidebar = () => {
           <button
             onClick={() => setOpen((prev) => !prev)}
             className={cn(
-              "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white/70 transition hover:bg-white/5 hover:text-white",
+              "cursor-pointer flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white/70 transition hover:bg-white/5 hover:text-white",
               !open && "mx-auto"
             )}
           >

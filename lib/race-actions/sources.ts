@@ -25,7 +25,7 @@ export const createSource = async (sourceName: string) => {
         console.error(error);
         return {
             success: false,
-            message: "There was an error creating the source: ", error,
+            message: error instanceof Error ? error.message : "Unknown error",
         }
     }
 }
@@ -44,7 +44,7 @@ export const getSources = async () => {
         console.error(error);
         return {
             success: false,
-            message: "There was an error getting the sources: ", error,
+            message: error instanceof Error ? error.message : "Unknown error",
         }
     }
 }
@@ -60,7 +60,7 @@ export const deleteSource = async (id: string) => {
         console.error(error);
         return {
             success: false,
-            message: "There was an error deleting the source: ", error,
+            message: error instanceof Error ? error.message : "Unknown error",
         }
     }
 }

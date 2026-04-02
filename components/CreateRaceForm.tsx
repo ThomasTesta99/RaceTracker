@@ -81,8 +81,6 @@ const CreateRaceForm = () => {
   return (
     <div className="w-full max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg backdrop-blur">
       <div className="mb-6 flex flex-col gap-3">
-        <h2 className="text-2xl font-bold text-white">Create a Race Sheet</h2>
-
         <div>
           <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-5 py-2 text-sm font-medium text-white shadow-sm backdrop-blur-sm">
             {selectedDate

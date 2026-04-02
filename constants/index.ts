@@ -77,11 +77,6 @@ export const sidebarLinks = [
         label: 'Home', 
     },
     {
-        icon: FilePlus2Icon, 
-        route: '/new-race-sheet', 
-        label: 'Create New Race Sheet', 
-    },
-    {
         icon: FileSpreadsheetIcon,
         route: '/race-sheets', 
         label: 'Race Sheets', 

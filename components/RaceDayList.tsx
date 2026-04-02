@@ -3,6 +3,7 @@
 import { GetRaceDaysResponse, RaceDay } from "@/types";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import CreateRace from "./CreateRace";
 
 const RaceDayList = () => {
   const [raceDayList, setRaceDayList] = useState<RaceDay[]>([]);
@@ -58,16 +59,19 @@ const RaceDayList = () => {
   return (
     <section className="min-h-screen px-6 py-10 text-white">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-10">
-          <p className="text-sm uppercase tracking-[0.25em] text-white/40">
-            Horse Racing Tracker
-          </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight">
-            Races
-          </h1>
-          <p className="mt-3 text-white/60">
-            Select a date to open that race page.
-          </p>
+        <div className="mb-10 flex flex-row justify-between items-center">
+          <div>
+            <p className="text-sm uppercase tracking-[0.25em] text-white/40">
+              Horse Racing Tracker
+            </p>
+            <h1 className="mt-2 text-4xl font-bold tracking-tight">
+              Races
+            </h1>
+            <p className="mt-3 text-white/60">
+              Select a date to open that race page.
+            </p>
+          </div>
+          <CreateRace />
         </div>
 
         {raceDayList.length === 0 ? (

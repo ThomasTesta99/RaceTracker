@@ -14,11 +14,12 @@ export const createRaceDay = async ({ date, track }: { date: string; track: stri
       track,
     };
 
-    await db.insert(raceDays).values(newRaceDay);
+    const [race] = await db.insert(raceDays).values(newRaceDay).returning();
 
     return {
       success: true,
       message: "Race day added",
+      raceDay: race, 
     };
   } catch (error) {
     console.error(error);

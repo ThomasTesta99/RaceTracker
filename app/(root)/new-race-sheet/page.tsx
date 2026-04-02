@@ -11,7 +11,7 @@ const page = () => {
         <div>
             <div className='flex flex-row items-center gap-4 justify-center'>
                 <h1 className="text-3xl font-bold">
-                    Create a New Race Sheet for
+                    Create a New Race Sheet
                 </h1>
             </div>
             

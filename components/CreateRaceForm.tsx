@@ -4,6 +4,7 @@ import { createRaceDay } from "@/lib/race-actions/raceDay";
 import React, { useState, FormEvent } from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -24,6 +25,8 @@ const isSameDay = (a: Date, b: Date) => {
 };
 
 const CreateRaceForm = () => {
+  const router = useRouter();
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [useToday, setUseToday] = useState(false);
   const [track, setTrack] = useState("");
@@ -44,15 +47,9 @@ const CreateRaceForm = () => {
     const formattedDate = format(selectedDate, "yyyy-MM-dd");
     const result = await createRaceDay({ date: formattedDate, track });
 
-    if (result.success) {
-      setMessage(result.message);
-      setTrack("");
-
-      if (useToday) {
-        setSelectedDate(new Date());
-      } else {
-        setSelectedDate(undefined);
-      }
+    if (result.success && result.raceDay) {
+      router.push(`/race-sheet/${result.raceDay.id}`);
+      return;
     } else {
       setMessage(result.message);
     }
@@ -84,13 +81,13 @@ const CreateRaceForm = () => {
   return (
     <div className="w-full max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg backdrop-blur">
       <div className="mb-6 flex flex-col gap-3">
-        <h2 className="text-2xl font-bold text-white">
-          Create a Race Sheet
-        </h2>
+        <h2 className="text-2xl font-bold text-white">Create a Race Sheet</h2>
 
         <div>
           <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-5 py-2 text-sm font-medium text-white shadow-sm backdrop-blur-sm">
-            {selectedDate ? format(selectedDate, "MMMM d, yyyy") : "No date selected"}
+            {selectedDate
+              ? format(selectedDate, "MMMM d, yyyy")
+              : "No date selected"}
           </span>
         </div>
       </div>
@@ -123,7 +120,7 @@ const CreateRaceForm = () => {
                 className={cn(
                   "w-full justify-start rounded-lg border border-white/15 bg-black/30 px-4 py-3 text-left text-white",
                   !selectedDate && "text-white/40",
-                  useToday && "opacity-70",
+                  useToday && "opacity-70"
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -159,7 +156,7 @@ const CreateRaceForm = () => {
         <button
           type="submit"
           disabled={loading}
-          className="cursor-pointer w-full rounded-lg bg-white px-4 py-3 font-semibold text-black transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full cursor-pointer rounded-lg bg-white px-4 py-3 font-semibold text-black transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? "Creating..." : "Create Race Sheet"}
         </button>

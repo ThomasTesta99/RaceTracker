@@ -34,3 +34,14 @@ export type GetRaceDaysResponse =
       message: string;
       raceList?: RaceDay[];
     };
+
+  export type GetSourcesResponse = 
+    | {
+        success: true;
+        sourcesList: Source[];
+      }
+    | {
+        success: false;
+        message: string;
+        sourcesList?: Source[];
+      }

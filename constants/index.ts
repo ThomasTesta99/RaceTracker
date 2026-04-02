@@ -1,6 +1,6 @@
 // import { RaceData } from "@/types";
 
-import { BarChart2Icon, FilePlus2Icon, FileSpreadsheetIcon, HomeIcon } from "lucide-react";
+import { BarChart2Icon, DatabaseIcon, FilePlus2Icon, FileSpreadsheetIcon, HomeIcon } from "lucide-react";
 
 // export const SOURCES = [
 //     {
@@ -85,6 +85,11 @@ export const sidebarLinks = [
         icon: FileSpreadsheetIcon,
         route: '/race-sheets', 
         label: 'Race Sheets', 
+    },
+    {
+        icon: DatabaseIcon, 
+        route: '/sources', 
+        label: 'Sources'
     },
     {
         icon: BarChart2Icon, 

@@ -49,6 +49,39 @@ export const getSources = async () => {
     }
 }
 
+export const editSource = async ({id, sourceName}: {id: string, sourceName: string}) => {
+    try {
+        const [exists] = await db.select().from(sources).where(eq(sources.id, id));
+
+        if(!exists){
+            return {
+                success: false, 
+                message: "Source doesn't exist", 
+            }
+        }
+
+        if(sourceName === exists.name){
+            return {
+                success: false, 
+                message: "Nothing to change"
+            }
+        }
+
+        const [result] = await db.update(sources).set({name: sourceName}).where(eq(sources.id, id)).returning();
+
+        return {
+            success: true, 
+            updatedSource: result
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            success: false,
+            message: error instanceof Error ? error.message : "Unknown error",
+        }
+    }
+}
+
 export const deleteSource = async (id: string) => {
     try {
         await db.delete(sources).where(eq(sources.id, id));

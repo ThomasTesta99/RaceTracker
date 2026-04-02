@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,23 +10,37 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
+import { Source } from "@/types";
 
 type CreateSourceProps = {
-  onSourceCreated?: () => void;
+  onSourceSaved?: () => void;
+  source?: Source;
+  trigger?: React.ReactNode;
 };
 
-const CreateSource = ({ onSourceCreated }: CreateSourceProps) => {
+const SourceDialog = ({ onSourceSaved, source, trigger }: CreateSourceProps) => {
+  const isEditMode = !!source;
+
   const [open, setOpen] = useState(false);
   const [sourceName, setSourceName] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleCreateSource = async (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (open) {
+      setSourceName(source?.name ?? "");
+      setMessage("");
+    }
+  }, [open, source]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage("");
 
-    if (!sourceName.trim()) {
+    const trimmedName = sourceName.trim();
+
+    if (!trimmedName) {
       setMessage("Source name is required");
       return;
     }
@@ -35,31 +49,34 @@ const CreateSource = ({ onSourceCreated }: CreateSourceProps) => {
       setLoading(true);
 
       const res = await fetch("/api/sources", {
-        method: "POST",
+        method: isEditMode ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          sourceName: sourceName.trim(),
-        }),
+        body: JSON.stringify(
+          isEditMode
+            ? { id: source.id, sourceName: trimmedName }
+            : { sourceName: trimmedName }
+        ),
       });
 
       const result = await res.json();
 
       if (result.success) {
-        setMessage("");
-        setSourceName("");
         setOpen(false);
+        setSourceName("");
+        setMessage("");
 
-        if (onSourceCreated) {
-          onSourceCreated();
-        }
+        onSourceSaved?.();
       } else {
-        setMessage(result.message || "Failed to create source");
+        setMessage(
+          result.message ||
+            `Failed to ${isEditMode ? "update" : "create"} source`
+        );
       }
     } catch (error) {
       console.error(error);
-      setMessage("Failed to create source");
+      setMessage(`Failed to ${isEditMode ? "update" : "create"} source`);
     } finally {
       setLoading(false);
     }
@@ -70,6 +87,7 @@ const CreateSource = ({ onSourceCreated }: CreateSourceProps) => {
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
+
         if (!next) {
           setMessage("");
           setSourceName("");
@@ -77,22 +95,28 @@ const CreateSource = ({ onSourceCreated }: CreateSourceProps) => {
       }}
     >
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full cursor-pointer text-black"
-        >
-          <Plus />
-          Create Source
-        </Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-full cursor-pointer text-black"
+          >
+            <Plus className="h-4 w-4" />
+            Create Source
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="max-w-md [&>button]:cursor-pointer">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Create Source</DialogTitle>
+          <DialogTitle className="text-2xl">
+            {isEditMode ? "Edit Source" : "Create Source"}
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleCreateSource} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="sourceName" className="text-sm font-medium">
               Source Name
@@ -112,7 +136,13 @@ const CreateSource = ({ onSourceCreated }: CreateSourceProps) => {
             className="w-full cursor-pointer"
             disabled={loading}
           >
-            {loading ? "Creating..." : "Create Source"}
+            {loading
+              ? isEditMode
+                ? "Saving..."
+                : "Creating..."
+              : isEditMode
+              ? "Save Changes"
+              : "Create Source"}
           </Button>
         </form>
       </DialogContent>
@@ -120,4 +150,4 @@ const CreateSource = ({ onSourceCreated }: CreateSourceProps) => {
   );
 };
 
-export default CreateSource;
+export default SourceDialog;

@@ -43,5 +43,5 @@ export type GetRaceDaysResponse =
     | {
         success: false;
         message: string;
-        raceList?: RaceDay[];
+        sourcesList?: Source[];
       }

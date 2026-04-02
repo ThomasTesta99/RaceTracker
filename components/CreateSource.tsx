@@ -24,10 +24,6 @@ const CreateSource = () => {
                 <DialogHeader>
                     <DialogTitle className="text-2xl">Create Source</DialogTitle>
                 </DialogHeader>
-
-                <div>
-                    HIHIHI
-                </div>
             </DialogContent>
             
         </Dialog>

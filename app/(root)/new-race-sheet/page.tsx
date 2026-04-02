@@ -2,11 +2,6 @@ import CreateRaceForm from '@/components/CreateRaceForm';
 import React from 'react'
 
 const page = () => {
-    const today = new Date().toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    });
     return (
         <div>
             <div className='flex flex-row items-center gap-4 justify-center'>

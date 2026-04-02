@@ -57,17 +57,16 @@ const RaceSources = () => {
     return (
         <>
             <section className="min-h-screen px-6 py-10">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col mx-auto max-w-5xl">
                     <div>
                         <h1 className="text-4xl font-bold tracking-tight">Sources</h1>
                         <p className="mt-2 text-white/60">
                             Manage the sources your race data comes from.
                         </p>
                     </div>
-
-                    <div>
-                        <CreateSource />
-                    </div>
+                </div>
+                <div className='mt-5'>
+                    <CreateSource />
                 </div>
             </section>
         </>

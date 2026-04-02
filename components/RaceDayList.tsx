@@ -80,7 +80,7 @@ const RaceDayList = () => {
               <Link
                 key={race.id}
                 href={`/race-sheet/${race.id}`}
-                className="group flex items-center justify-between gap-6 py-5 transition hover:bg-white/[0.02]"
+                className="group flex items-center justify-between gap-6 p-5 transition hover:bg-white/[0.02]"
               >
                 <div className="min-w-0">
                   <h2 className="text-2xl font-semibold tracking-tight text-white transition group-hover:text-white/90">

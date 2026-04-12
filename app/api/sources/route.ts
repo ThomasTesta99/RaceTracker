@@ -1,4 +1,4 @@
-import { createSource, editSource, getSources } from "@/lib/race-actions/sources";
+import { createSource, deleteSource, editSource, getSources } from "@/lib/race-actions/sources";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {

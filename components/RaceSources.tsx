@@ -6,6 +6,7 @@ import CreateSource from "./SourceDialog";
 import { Button } from "./ui/button";
 import { Pencil } from "lucide-react";
 import SourceDialog from "./SourceDialog";
+import DeleteSourceButton from "./DeleteSourceButton";
 
 const RaceSources = () => {
   const [sourcesList, setSourcesList] = useState<Source[]>([]);
@@ -93,20 +94,28 @@ const RaceSources = () => {
                     </p>
                   </div>
 
-                  <SourceDialog
-                    source={source}
-                    onSourceSaved={fetchSources}
-                    trigger={
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="cursor-pointer text-black"
-                      >
-                        <Pencil className="h-4 w-4" />
-                        Edit
-                      </Button>
-                    }
-                  />
+                  <div className="flex flex-row gap-4">
+                    <SourceDialog
+                      source={source}
+                      onSourceSaved={fetchSources}
+                      trigger={
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="cursor-pointer text-black"
+                        >
+                          <Pencil className="h-4 w-4" />
+                          Edit
+                        </Button>
+                      }
+                    />
+
+                    <DeleteSourceButton
+                      sourceId={source.id}
+                      sourceName={source.name}
+                      onDeleted={fetchSources}
+                    />
+                  </div>
                 </div>
               ))}
             </div>

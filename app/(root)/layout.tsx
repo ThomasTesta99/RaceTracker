@@ -1,11 +1,15 @@
 import Sidebar from '@/components/Sidebar'
+import Topbar from '@/components/Topbar'
 import React, { ReactNode } from 'react'
 
 const layout = ({children} : {children : ReactNode}) => {
   return (
     <main className="flex flex-col md:flex-row w-full min-h-dvh overflow-x-hidden">
+      <div className="md:hidden">
+        <Topbar />
+      </div>
 
-        <div>
+        <div className='hidden md:flex md:flex-col'>
             <Sidebar />
         </div>
 

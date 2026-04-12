@@ -14,7 +14,7 @@ const Sidebar = () => {
   return (
     <section
       className={cn(
-        "h-screen overflow-hidden border-r border-white/10 bg-black/40 backdrop-blur-xl transition-all duration-300",
+        "h-full self-stretch overflow-hidden border-r border-white/10 bg-black/40 backdrop-blur-xl transition-all duration-300",
         open ? "w-[320px]" : "w-[80px]"
       )}
     >

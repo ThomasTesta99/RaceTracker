@@ -27,7 +27,7 @@ export const races = pgTable("races", {
     raceDayId: text("race_day_id")
       .notNull()
       .references(() => raceDays.id, { onDelete: "cascade" }),
-    raceNumber: integer("race_number"),
+    raceNumber: integer("race_number").notNull(),
     result: text("result"),
     betType: betTypeEnum("bet_type"),
     win1: text("win_1"),
@@ -61,7 +61,7 @@ export const racePicks = pgTable("race_picks", {
       .references(() => races.id, { onDelete: "cascade" }),
     sourceId: text("source_id")
       .notNull()
-      .references(() => sources.id, { onDelete: "restrict" }),
+      .references(() => sources.id, { onDelete: "cascade" }),
     value1: text("value_1"),
     value2: text("value_2"),
     value3: text("value_3"),

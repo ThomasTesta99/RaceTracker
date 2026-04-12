@@ -16,7 +16,7 @@ const RaceSheetTable = ({
   initialRows,
 }: RaceSheetTableProps) => {
   const [rows, setRows] = useState<RaceRow[]>(initialRows);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const updateResult = (raceNumber: number, value: RaceResultOption) => {
@@ -72,7 +72,7 @@ const RaceSheetTable = ({
   };
 
   const handleSave = () => {
-    setMessage("");
+    setMessage(null);
 
     startTransition(async () => {
       const result = await saveRaceSheet({
@@ -80,7 +80,7 @@ const RaceSheetTable = ({
         rows,
       });
 
-      setMessage(result.message);
+      setMessage({ text: result.message, isError: !result.success });
     });
   };
 
@@ -103,7 +103,11 @@ const RaceSheetTable = ({
         </button>
       </div>
 
-      {message ? <p className="text-sm text-white/70">{message}</p> : null}
+      {message ? (
+        <p className={`text-sm ${message.isError ? "text-red-400" : "text-green-400"}`}>
+          {message.text}
+        </p>
+      ) : null}
 
       <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-sm">
         <table className="min-w-full border-collapse text-sm text-white">

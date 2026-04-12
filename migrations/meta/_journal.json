@@ -15,6 +15,20 @@
       "when": 1775059892047,
       "tag": "0001_complex_gabe_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776022512807,
+      "tag": "0002_supreme_cardiac",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1776022916239,
+      "tag": "0003_handy_strong_guy",
+      "breakpoints": true
     }
   ]
 }

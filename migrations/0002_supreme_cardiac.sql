@@ -1,0 +1,1 @@
+ALTER TABLE "races" ALTER COLUMN "race_number" SET NOT NULL;

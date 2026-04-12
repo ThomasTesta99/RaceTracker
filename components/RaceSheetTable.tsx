@@ -115,28 +115,28 @@ const RaceSheetTable = ({
             <tr className="border-b border-white/10 bg-white/10">
               <th
                 rowSpan={2}
-                className="min-w-[120px] px-4 py-3 text-left font-semibold"
+                className="min-w-[120px] px-4 py-3 text-left font-semibold text-xl"
               >
                 Result
               </th>
               <th
                 rowSpan={2}
-                className="min-w-[90px] px-4 py-3 text-left font-semibold"
+                className="min-w-[90px] px-4 py-3 text-left font-semibold text-xl"
               >
                 Race #
               </th>
               <th
                 colSpan={3}
-                className="px-4 py-3 text-center font-semibold text-white"
+                className="px-4 py-3 text-center font-semibold text-white text-xl"
               >
-                Your Picks
+                Winners
               </th>
 
               {sources.map((source) => (
                 <th
                   key={source.id}
                   colSpan={3}
-                  className="border-l border-white/20 px-4 py-3 text-center font-semibold text-white"
+                  className="border-l border-white/20 px-4 py-3 text-center font-semibold text-white text-xl"
                 >
                   {source.name}
                 </th>

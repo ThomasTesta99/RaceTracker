@@ -4,6 +4,7 @@ import { db } from "@/database/drizzle";
 import { raceDays } from "@/database/schema";
 import { NewRaceDay } from "@/types";
 import { randomUUID } from "crypto";
+import { ca } from "date-fns/locale";
 import { eq } from "drizzle-orm";
 
 export const createRaceDay = async ({ date, track }: { date: string; track: string }) => {
@@ -80,6 +81,22 @@ export const getRaceDay = async ({ id }: { id: string }) => {
     return {
       success: false,
       message: error instanceof Error ? error.message : "There was an error getting the race day.",
+    };
+  }
+};
+
+export const deleteRaceDay = async ({ id }: { id: string }) => {
+  try {
+    await db.delete(raceDays).where(eq(raceDays.id, id)).returning();
+
+    return {
+      success: true, 
+    }
+  }catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "There was an error deleting the race.", 
     };
   }
 };

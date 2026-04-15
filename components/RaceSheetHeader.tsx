@@ -1,12 +1,23 @@
 "use client";
 
-import { RaceDay } from "@/types";
+import { RaceDay, Source } from "@/types";
 import React, { useState } from "react";
 import { CalendarDays, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import EditRaceSources from "./EditRaceSources";
 
-const RaceSheetHeader = ({ raceDay }: { raceDay: RaceDay }) => {
+type RaceSheetHeaderProps = {
+  raceDay: RaceDay;
+  allSources: Source[];
+  selectedSourceIds: string[];
+};
+
+const RaceSheetHeader = ({
+  raceDay,
+  allSources,
+  selectedSourceIds,
+}: RaceSheetHeaderProps) => {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -53,7 +64,7 @@ const RaceSheetHeader = ({ raceDay }: { raceDay: RaceDay }) => {
   };
 
   return (
-    <section className=" shadow-lg backdrop-blur-sm">
+    <section className="shadow-lg backdrop-blur-sm">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="space-y-4">
           <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">
@@ -65,7 +76,7 @@ const RaceSheetHeader = ({ raceDay }: { raceDay: RaceDay }) => {
             <span>{formattedDate}</span>
           </div>
 
-          <div className="flex">
+          <div className="flex gap-4">
             <Button
               variant="destructive"
               className="cursor-pointer gap-2 font-semibold"
@@ -75,6 +86,12 @@ const RaceSheetHeader = ({ raceDay }: { raceDay: RaceDay }) => {
               <Trash className="h-4 w-4" />
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
+
+            <EditRaceSources
+              raceDayId={raceDay.id}
+              allSources={allSources}
+              selectedSourceIds={selectedSourceIds}
+            />
           </div>
         </div>
 

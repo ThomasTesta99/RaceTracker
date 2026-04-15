@@ -76,9 +76,27 @@ export const racePicks = pgTable("race_picks", {
   ]
 );
 
+export const raceDaySources = pgTable(
+  "race_day_sources",
+  {
+    raceDayId: text("race_day_id")
+      .notNull()
+      .references(() => raceDays.id, { onDelete: "cascade" }),
+    sourceId: text("source_id")
+      .notNull()
+      .references(() => sources.id, { onDelete: "cascade" }),
+  },
+  (table) => [
+    uniqueIndex("race_day_sources_unique").on(table.raceDayId, table.sourceId),
+    index("race_day_sources_race_day_id_idx").on(table.raceDayId),
+    index("race_day_sources_source_id_idx").on(table.sourceId),
+  ]
+);
+
 export const schema = {
   raceDays,
   races,
   sources,
+  raceDaySources,
   racePicks,
 };

@@ -53,7 +53,7 @@ const RaceSheetHeader = ({ raceDay }: { raceDay: RaceDay }) => {
   };
 
   return (
-    <section className="p-6 shadow-lg backdrop-blur-sm">
+    <section className=" shadow-lg backdrop-blur-sm">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="space-y-4">
           <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">

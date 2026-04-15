@@ -36,7 +36,7 @@ const RaceDayList = () => {
     return (
       <section className="min-h-screen px-6 py-10 text-white">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-4xl font-bold tracking-tight">Race Schedule</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Races</h1>
           <p className="mt-3 text-white/60">Loading race days...</p>
         </div>
       </section>

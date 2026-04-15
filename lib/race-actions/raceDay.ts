@@ -1,10 +1,10 @@
 "use server";
 
 import { db } from "@/database/drizzle";
-import { raceDays, raceDaySources } from "@/database/schema";
+import { raceDays, raceDaySources, sources } from "@/database/schema";
 import { NewRaceDay } from "@/types";
 import { randomUUID } from "crypto";
-import { eq } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 
 export const createRaceDay = async ({
   date,
@@ -114,6 +114,98 @@ export const deleteRaceDay = async ({ id }: { id: string }) => {
     return {
       success: false,
       message: error instanceof Error ? error.message : "There was an error deleting the race.", 
+    };
+  }
+};
+
+export const updateRaceDaySources = async ({
+  raceDayId,
+  sourceIds,
+}: {
+  raceDayId: string;
+  sourceIds: string[];
+}) => {
+  try {
+    if (sourceIds.length === 0) {
+      return {
+        success: false,
+        message: "Please select at least one source.",
+      };
+    }
+
+    const currentLinks = await db
+      .select({
+        sourceId: raceDaySources.sourceId,
+      })
+      .from(raceDaySources)
+      .where(eq(raceDaySources.raceDayId, raceDayId));
+
+    const currentSourceIds = currentLinks.map((link) => link.sourceId);
+
+    const toAdd = sourceIds.filter((id) => !currentSourceIds.includes(id));
+    const toRemove = currentSourceIds.filter((id) => !sourceIds.includes(id));
+
+    if (toAdd.length > 0) {
+      await db.insert(raceDaySources).values(
+        toAdd.map((sourceId) => ({
+          raceDayId,
+          sourceId,
+        }))
+      );
+    }
+
+    if (toRemove.length > 0) {
+      await db
+        .delete(raceDaySources)
+        .where(
+          and(
+            eq(raceDaySources.raceDayId, raceDayId),
+            inArray(raceDaySources.sourceId, toRemove)
+          )
+        );
+    }
+
+    return {
+      success: true,
+      message: "Sources updated successfully.",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Failed to update sources.",
+    };
+  }
+};
+
+export const getRaceDaySourceOptions = async (raceDayId: string) => {
+  try {
+    const allSources = await db
+      .select()
+      .from(sources)
+      .orderBy(asc(sources.name));
+
+    const selectedLinks = await db
+      .select({
+        sourceId: raceDaySources.sourceId,
+      })
+      .from(raceDaySources)
+      .where(eq(raceDaySources.raceDayId, raceDayId));
+
+    const selectedSourceIds = selectedLinks.map((link) => link.sourceId);
+
+    return {
+      success: true,
+      allSources,
+      selectedSourceIds,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Failed to load race day sources.",
     };
   }
 };

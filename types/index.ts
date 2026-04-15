@@ -1,4 +1,4 @@
-import { raceDays, racePicks, races, sources } from "@/database/schema";
+import { raceDays, raceDaySources, racePicks, races, sources } from "@/database/schema";
 
 export type RaceResult = "win" | "loss" | "scratch";
 
@@ -13,6 +13,9 @@ export type NewRace = typeof races.$inferInsert;
 
 export type Source = typeof sources.$inferSelect;
 export type NewSource = typeof sources.$inferInsert;
+
+export type RaceDaySource = typeof raceDaySources.$inferSelect;
+export type NewRaceDaySource = typeof raceDaySources.$inferInsert;
 
 export type GetRaceDayResponse =
   | {

@@ -115,13 +115,13 @@ const RaceSheetTable = ({
             <tr className="border-b border-white/10 bg-white/10">
               <th
                 rowSpan={2}
-                className="min-w-[120px] px-4 py-3 text-left font-semibold text-xl"
+                className="min-w-[120px] px-4 py-3 text-center font-semibold text-xl"
               >
                 Result
               </th>
               <th
                 rowSpan={2}
-                className="min-w-[90px] px-4 py-3 text-left font-semibold text-xl"
+                className="min-w-[90px] px-4 py-3 text-center font-semibold text-xl"
               >
                 Race #
               </th>
@@ -167,7 +167,7 @@ const RaceSheetTable = ({
                 className="border-b border-white/10 align-middle hover:bg-white/5"
               >
                 <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col items-center gap-2">
                     <Select
                       value={row.result}
                       onValueChange={(value) =>
@@ -187,14 +187,14 @@ const RaceSheetTable = ({
                     <button
                       type="button"
                       onClick={() => updateResult(row.raceNumber, "")}
-                      className="rounded-md border border-white/10 px-2 py-2 text-xs text-white/70 hover:bg-white/5"
+                      className="w-full rounded-md border border-white/10 py-1 text-xs text-white/70 hover:bg-white/5 cursor-pointer"
                     >
                       Clear
                     </button>
                   </div>
                 </td>
 
-                <td className="px-4 py-3 text-white/90">{row.raceNumber}</td>
+                <td className="px-4 py-3 text-center font-semibold text-white/90">{row.raceNumber}</td>
 
                 <td className="px-2 py-3">
                   <input

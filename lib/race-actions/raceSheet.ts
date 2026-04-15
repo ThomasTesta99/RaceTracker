@@ -4,7 +4,7 @@ import { asc, eq, inArray } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { RaceRow, Source } from "@/types";
 import { db } from "@/database/drizzle";
-import { racePicks, races, sources } from "@/database/schema";
+import { raceDaySources, racePicks, races, sources } from "@/database/schema";
 
 const TOTAL_RACES = 15;
 
@@ -35,7 +35,15 @@ const createEmptyRows = (sourcesList: Source[]): RaceRow[] => {
 
 export const getRaceSheetData = async (raceDayId: string) => {
   try {
-    const sourcesList = await db.select().from(sources).orderBy(asc(sources.name));
+    const sourcesList = await db
+      .select({
+        id: sources.id,
+        name: sources.name,
+      })
+      .from(raceDaySources)
+      .innerJoin(sources, eq(raceDaySources.sourceId, sources.id))
+      .where(eq(raceDaySources.raceDayId, raceDayId))
+      .orderBy(asc(sources.name));
 
     const racesList = await db
       .select()

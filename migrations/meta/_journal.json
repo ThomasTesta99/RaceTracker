@@ -29,6 +29,13 @@
       "when": 1776022916239,
       "tag": "0003_handy_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776283238650,
+      "tag": "0004_loud_switch",
+      "breakpoints": true
     }
   ]
 }

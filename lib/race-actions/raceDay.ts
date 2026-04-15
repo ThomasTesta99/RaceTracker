@@ -1,21 +1,38 @@
 "use server";
 
 import { db } from "@/database/drizzle";
-import { raceDays } from "@/database/schema";
+import { raceDays, raceDaySources } from "@/database/schema";
 import { NewRaceDay } from "@/types";
 import { randomUUID } from "crypto";
-import { ca } from "date-fns/locale";
 import { eq } from "drizzle-orm";
 
-export const createRaceDay = async ({ date, track }: { date: string; track: string }) => {
+export const createRaceDay = async ({
+  date,
+  track,
+  sourceIds,
+}: {
+  date: string;
+  track: string;
+  sourceIds: string[];
+}) => {
   try {
+    const newRaceDayId = randomUUID();
     const newRaceDay: NewRaceDay = {
-      id: randomUUID(),
+      id: newRaceDayId,
       date,
       track,
     };
 
     const [race] = await db.insert(raceDays).values(newRaceDay).returning();
+    
+    if (sourceIds.length > 0) {
+      await db.insert(raceDaySources).values(
+        sourceIds.map((sourceId) => ({
+          raceDayId: newRaceDayId,
+          sourceId,
+        }))
+      );
+    }
 
     return {
       success: true,

@@ -1,7 +1,7 @@
 "use client";
 
 import { createRaceDay } from "@/lib/race-actions/raceDay";
-import React, { useState, FormEvent } from "react";
+import React, { useEffect, useState, FormEvent } from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { Source } from "@/types";
 
 const isSameDay = (a: Date, b: Date) => {
   return (
@@ -30,8 +31,38 @@ const CreateRaceForm = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [useToday, setUseToday] = useState(false);
   const [track, setTrack] = useState("");
+  const [sources, setSources] = useState<Source[]>([]);
+  const [selectedSourceIds, setSelectedSourceIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchSources = async () => {
+      try {
+        const res = await fetch("/api/sources");
+        const result = await res.json();
+
+        if (result.success) {
+          setSources(result.sourcesList ?? []);
+        } else {
+          setMessage(result.message ?? "Failed to load sources.");
+        }
+      } catch (error) {
+        console.error(error);
+        setMessage("Failed to load sources.");
+      }
+    };
+
+    fetchSources();
+  }, []);
+
+  const toggleSource = (sourceId: string) => {
+    setSelectedSourceIds((prev) =>
+      prev.includes(sourceId)
+        ? prev.filter((id) => id !== sourceId)
+        : [...prev, sourceId]
+    );
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,8 +75,19 @@ const CreateRaceForm = () => {
       return;
     }
 
+    if (selectedSourceIds.length === 0) {
+      setMessage("Please select at least one source.");
+      setLoading(false);
+      return;
+    }
+
     const formattedDate = format(selectedDate, "yyyy-MM-dd");
-    const result = await createRaceDay({ date: formattedDate, track });
+
+    const result = await createRaceDay({
+      date: formattedDate,
+      track,
+      sourceIds: selectedSourceIds,
+    });
 
     if (result.success && result.raceDay) {
       router.push(`/race-sheet/${result.raceDay.id}`);
@@ -149,6 +191,33 @@ const CreateRaceForm = () => {
             required
             className="rounded-lg border border-white/15 bg-black/30 px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-white/40"
           />
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-medium text-white">Sources</label>
+
+          <div className="grid gap-3 rounded-lg border border-white/10 bg-black/20 p-4">
+            {sources.length === 0 ? (
+              <p className="text-sm text-white/60">No sources available.</p>
+            ) : (
+              sources.map((source) => (
+                <div key={source.id} className="flex items-center gap-3">
+                  <Checkbox
+                    id={source.id}
+                    checked={selectedSourceIds.includes(source.id)}
+                    onCheckedChange={() => toggleSource(source.id)}
+                    className="cursor-pointer"
+                  />
+                  <label
+                    htmlFor={source.id}
+                    className="cursor-pointer text-sm text-white"
+                  >
+                    {source.name}
+                  </label>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
         <button

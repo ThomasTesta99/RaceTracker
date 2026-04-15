@@ -47,9 +47,16 @@ const RaceDayList = () => {
     return (
       <section className="min-h-screen px-6 py-10 text-white">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-4xl font-bold tracking-tight">Race Schedule</h1>
-          <div className="mt-6 border-b border-white/10 pb-4 text-white/70">
-            {message}
+          <div className="mb-10 flex flex-row items-center justify-between">
+            <div>
+              <p className="text-sm uppercase tracking-[0.25em] text-white/40">
+                Horse Racing Tracker
+              </p>
+              <h1 className="mt-2 text-4xl font-bold tracking-tight">Races</h1>
+              <p className="mt-3 text-white/60">{message}</p>
+            </div>
+
+            <CreateRace />
           </div>
         </div>
       </section>

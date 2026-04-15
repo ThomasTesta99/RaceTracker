@@ -40,8 +40,8 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const raceDay = raceDayResult.raceDay;
 
   return (
-    <section className="min-h-screen px-6 py-10 text-white">
-      <div className="mx-auto max-w-7xl space-y-6">
+    <section className="min-h-screen  text-white">
+      <div className="mx-auto max-w-7xl space-y-10">
         <RaceSheetHeader raceDay={raceDay} />
         <RaceSheetTable
           raceDayId={raceDay.id}

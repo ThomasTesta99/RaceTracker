@@ -75,3 +75,11 @@ export type RaceSheetPageData = {
   sources: Source[];
   rows: RaceRow[];
 };
+
+export type SourceStat = {
+  sourceId: string;
+  sourceName: string;
+  totalPicks: number;
+  correctFirstPicks: number;
+  accuracyPercent: number;
+};

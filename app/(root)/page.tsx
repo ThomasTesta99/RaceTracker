@@ -26,7 +26,7 @@ const page = () => {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CreateRace
                   trigger={
-                    <Button className="h-12 cursor-pointer rounded-xl bg-white px-5 font-semibold text-black transition hover:bg-white/80">
+                    <Button type="button" className="h-12 cursor-pointer rounded-xl bg-white px-5 font-semibold text-black transition hover:bg-white/80">
                       <CalendarPlus className="h-5 w-5" />
                       Create a Race
                     </Button>

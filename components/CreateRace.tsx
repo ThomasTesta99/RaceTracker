@@ -25,6 +25,7 @@ const CreateRace = ({ trigger }: CreateRaceProps) => {
       <DialogTrigger asChild>
         {trigger ?? (
           <Button
+            type="button"
             variant="outline"
             className="cursor-pointer border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white"
           >

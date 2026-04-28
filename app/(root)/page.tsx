@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { BarChart3, CalendarPlus, Flag, Trophy } from "lucide-react";
+import { BarChart3, CalendarPlus } from "lucide-react";
 import CreateRace from "@/components/CreateRace";
 import { Button } from "@/components/ui/button";
 

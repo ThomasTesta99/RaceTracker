@@ -34,9 +34,9 @@ const RaceDayList = () => {
 
   if (loading) {
     return (
-      <section className="min-h-screen px-6 py-10 text-white">
+      <section className="min-h-screen px-4 py-8 sm:px-6 sm:py-10 text-white">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-4xl font-bold tracking-tight">Races</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Races</h1>
           <p className="mt-3 text-white/60">Loading race days...</p>
         </div>
       </section>
@@ -45,14 +45,14 @@ const RaceDayList = () => {
 
   if (message) {
     return (
-      <section className="min-h-screen px-6 py-10 text-white">
+      <section className="min-h-screen px-4 py-8 sm:px-6 sm:py-10 text-white">
         <div className="mx-auto max-w-4xl">
-          <div className="mb-10 flex flex-row items-center justify-between">
+          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.25em] text-white/40">
                 Horse Racing Tracker
               </p>
-              <h1 className="mt-2 text-4xl font-bold tracking-tight">Races</h1>
+              <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Races</h1>
               <p className="mt-3 text-white/60">{message}</p>
             </div>
 
@@ -64,14 +64,14 @@ const RaceDayList = () => {
   }
 
   return (
-    <section className="min-h-screen px-6 py-10 text-white">
+    <section className="min-h-screen px-4 py-8 sm:px-6 sm:py-10 text-white">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-10 flex flex-row justify-between items-center">
+        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.25em] text-white/40">
               Horse Racing Tracker
             </p>
-            <h1 className="mt-2 text-4xl font-bold tracking-tight">
+            <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
               Races
             </h1>
             <p className="mt-3 text-white/60">
@@ -94,7 +94,7 @@ const RaceDayList = () => {
                 className="group flex items-center justify-between gap-6 p-5 transition hover:bg-white/[0.02]"
               >
                 <div className="min-w-0">
-                  <h2 className="text-2xl font-semibold tracking-tight text-white transition group-hover:text-white/90">
+                  <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-white transition group-hover:text-white/90">
                     {race.date}
                   </h2>
                   <p className="mt-1 text-sm text-white/50">{race.track}</p>

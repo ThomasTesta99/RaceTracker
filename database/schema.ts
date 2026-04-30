@@ -6,6 +6,7 @@ import {
   pgTable,
   text,
   uniqueIndex,
+  doublePrecision,
 } from "drizzle-orm/pg-core";
 
 export const betTypeEnum = pgEnum("bet_type", ["box", "exact"]);
@@ -14,6 +15,7 @@ export const raceDays = pgTable("race_days",{
     id: text("id").primaryKey(),
     date: date("date").notNull().defaultNow(),
     track: text("track").notNull(),
+    betMoney: doublePrecision("bet_money").default(0),
 },
   (table) => [
     index("race_days_date_idx").on(table.date),

@@ -209,3 +209,51 @@ export const getRaceDaySourceOptions = async (raceDayId: string) => {
     };
   }
 };
+
+export const updateBetMoney = async ({
+  raceDayId,
+  betMoney,
+}: {
+  raceDayId: string;
+  betMoney: number;
+}) => {
+  try {
+    if (Number.isNaN(betMoney) || betMoney < 0) {
+      return {
+        success: false,
+        message: "Please enter a valid bet amount.",
+      };
+    }
+
+    const [updatedRaceDay] = await db
+      .update(raceDays)
+      .set({
+        betMoney,
+      })
+      .where(eq(raceDays.id, raceDayId))
+      .returning();
+
+    if (!updatedRaceDay) {
+      return {
+        success: false,
+        message: "Race day not found.",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Bet money updated.",
+      raceDay: updatedRaceDay,
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "There was an error updating the bet money.",
+    };
+  }
+};

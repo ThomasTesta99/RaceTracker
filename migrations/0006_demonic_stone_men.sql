@@ -1,0 +1,1 @@
+ALTER TABLE "race_days" ADD COLUMN "bet_money" double precision DEFAULT 0;

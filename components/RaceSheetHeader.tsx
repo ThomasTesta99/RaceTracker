@@ -6,6 +6,7 @@ import { CalendarDays, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import EditRaceSources from "./EditRaceSources";
+import BetMoney from "./BetMoney";
 
 type RaceSheetHeaderProps = {
   raceDay: RaceDay;
@@ -95,7 +96,9 @@ const RaceSheetHeader = ({
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 md:items-end">Bet Money</div>
+        <div className="flex flex-col gap-3 md:items-end">
+          <BetMoney raceDayId={raceDay.id} money={raceDay.betMoney} />
+        </div>
       </div>
     </section>
   );

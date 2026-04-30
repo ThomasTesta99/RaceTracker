@@ -1,13 +1,15 @@
 "use client";
 
 import { saveRaceSheet } from "@/lib/race-actions/raceSheet";
-import {
-  RaceResultOption,
-  RaceRow,
-  RaceSheetTableProps,
-} from "@/types";
+import { RaceResultOption, RaceRow, RaceSheetTableProps } from "@/types";
 import React, { useState, useTransition } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 import { getPickHighlightClass, getUserPickHighlightClass } from "@/lib/utils";
 
 const RaceSheetTable = ({
@@ -16,13 +18,37 @@ const RaceSheetTable = ({
   initialRows,
 }: RaceSheetTableProps) => {
   const [rows, setRows] = useState<RaceRow[]>(initialRows);
-  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null);
+  const [message, setMessage] = useState<{
+    text: string;
+    isError: boolean;
+  } | null>(null);
+
   const [isPending, startTransition] = useTransition();
 
   const updateResult = (raceNumber: number, value: RaceResultOption) => {
     setRows((prev) =>
       prev.map((row) =>
         row.raceNumber === raceNumber ? { ...row, result: value } : row
+      )
+    );
+  };
+
+  const updateWinner = (
+    raceNumber: number,
+    field: "value1" | "value2" | "value3",
+    value: string
+  ) => {
+    setRows((prev) =>
+      prev.map((row) =>
+        row.raceNumber === raceNumber
+          ? {
+              ...row,
+              winners: {
+                ...row.winners,
+                [field]: value,
+              },
+            }
+          : row
       )
     );
   };
@@ -80,7 +106,10 @@ const RaceSheetTable = ({
         rows,
       });
 
-      setMessage({ text: result.message, isError: !result.success });
+      setMessage({
+        text: result.message,
+        isError: !result.success,
+      });
     });
   };
 
@@ -90,7 +119,7 @@ const RaceSheetTable = ({
         <div>
           <h2 className="text-xl font-semibold text-white">Race Sheet</h2>
           <p className="text-sm text-white/60">
-            Enter your picks and compare them against each source.
+            Enter the winners, your picks, and each source&apos;s picks.
           </p>
         </div>
 
@@ -104,7 +133,11 @@ const RaceSheetTable = ({
       </div>
 
       {message ? (
-        <p className={`text-sm ${message.isError ? "text-red-400" : "text-green-400"}`}>
+        <p
+          className={`text-sm ${
+            message.isError ? "text-red-400" : "text-green-400"
+          }`}
+        >
           {message.text}
         </p>
       ) : null}
@@ -115,28 +148,37 @@ const RaceSheetTable = ({
             <tr className="border-b border-white/10 bg-white/10">
               <th
                 rowSpan={2}
-                className="min-w-[120px] px-4 py-3 text-center font-semibold text-xl"
+                className="min-w-[120px] px-4 py-3 text-center text-xl font-semibold"
               >
                 Result
               </th>
+
               <th
                 rowSpan={2}
-                className="min-w-[90px] px-4 py-3 text-center font-semibold text-xl"
+                className="min-w-[90px] px-4 py-3 text-center text-xl font-semibold"
               >
                 Race #
               </th>
+
               <th
                 colSpan={3}
-                className="px-4 py-3 text-center font-semibold text-white text-xl"
+                className="px-4 py-3 text-center text-xl font-semibold text-white"
               >
                 Winners
+              </th>
+
+              <th
+                colSpan={3}
+                className="border-l border-white/20 px-4 py-3 text-center text-xl font-semibold text-white"
+              >
+                My Picks
               </th>
 
               {sources.map((source) => (
                 <th
                   key={source.id}
                   colSpan={3}
-                  className="border-l border-white/20 px-4 py-3 text-center font-semibold text-white text-xl"
+                  className="border-l border-white/20 px-4 py-3 text-center text-xl font-semibold text-white"
                 >
                   {source.name}
                 </th>
@@ -144,10 +186,19 @@ const RaceSheetTable = ({
             </tr>
 
             <tr className="border-b border-white/10 bg-white/5 text-white/70">
+              {/* Winners headers */}
               <th className="px-3 py-2 text-center font-medium">1st</th>
               <th className="px-3 py-2 text-center font-medium">2nd</th>
               <th className="px-3 py-2 text-center font-medium">3rd</th>
 
+              {/* My Picks headers */}
+              <th className="border-l border-white/20 px-3 py-2 text-center font-medium">
+                1st
+              </th>
+              <th className="px-3 py-2 text-center font-medium">2nd</th>
+              <th className="px-3 py-2 text-center font-medium">3rd</th>
+
+              {/* Source headers */}
               {sources.map((source) => (
                 <React.Fragment key={source.id}>
                   <th className="border-l border-white/20 px-3 py-2 text-center font-medium">
@@ -177,6 +228,7 @@ const RaceSheetTable = ({
                       <SelectTrigger className="w-full border-white/10 bg-black/30 text-sm text-white">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
+
                       <SelectContent className="border-white/10 bg-zinc-900 text-white">
                         <SelectItem value="win">Win</SelectItem>
                         <SelectItem value="loss">Loss</SelectItem>
@@ -187,16 +239,50 @@ const RaceSheetTable = ({
                     <button
                       type="button"
                       onClick={() => updateResult(row.raceNumber, "")}
-                      className="w-full rounded-md border border-white/10 py-1 text-xs text-white/70 hover:bg-white/5 cursor-pointer"
+                      className="w-full cursor-pointer rounded-md border border-white/10 py-1 text-xs text-white/70 hover:bg-white/5"
                     >
                       Clear
                     </button>
                   </div>
                 </td>
 
-                <td className="px-4 py-3 text-center font-semibold text-white/90">{row.raceNumber}</td>
+                <td className="px-4 py-3 text-center font-semibold text-white/90">
+                  {row.raceNumber}
+                </td>
+
+                {/* Winners */}
+                <td className="px-2 py-3">
+                  <input
+                    value={row.winners.value1}
+                    onChange={(e) =>
+                      updateWinner(row.raceNumber, "value1", e.target.value)
+                    }
+                    className="w-16 rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-center text-white outline-none"
+                  />
+                </td>
 
                 <td className="px-2 py-3">
+                  <input
+                    value={row.winners.value2}
+                    onChange={(e) =>
+                      updateWinner(row.raceNumber, "value2", e.target.value)
+                    }
+                    className="w-16 rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-center text-white outline-none"
+                  />
+                </td>
+
+                <td className="px-2 py-3">
+                  <input
+                    value={row.winners.value3}
+                    onChange={(e) =>
+                      updateWinner(row.raceNumber, "value3", e.target.value)
+                    }
+                    className="w-16 rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-center text-white outline-none"
+                  />
+                </td>
+
+                {/* My Picks */}
+                <td className="border-l border-white/20 px-2 py-3">
                   <input
                     value={row.userPicks.value1}
                     onChange={(e) =>
@@ -209,6 +295,7 @@ const RaceSheetTable = ({
                     )}`}
                   />
                 </td>
+
                 <td className="px-2 py-3">
                   <input
                     value={row.userPicks.value2}
@@ -222,6 +309,7 @@ const RaceSheetTable = ({
                     )}`}
                   />
                 </td>
+
                 <td className="px-2 py-3">
                   <input
                     value={row.userPicks.value3}
@@ -236,6 +324,7 @@ const RaceSheetTable = ({
                   />
                 </td>
 
+                {/* Sources */}
                 {sources.map((source) => (
                   <React.Fragment key={source.id}>
                     <td className="border-l border-white/20 px-2 py-3">
@@ -250,12 +339,13 @@ const RaceSheetTable = ({
                           )
                         }
                         className={`w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getPickHighlightClass(
-                          row.userPicks,
+                          row.winners,
                           row.sourcePicks[source.id]?.value1 ?? "",
                           0
                         )}`}
                       />
                     </td>
+
                     <td className="px-2 py-3">
                       <input
                         value={row.sourcePicks[source.id]?.value2 ?? ""}
@@ -268,12 +358,13 @@ const RaceSheetTable = ({
                           )
                         }
                         className={`w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getPickHighlightClass(
-                          row.userPicks,
+                          row.winners,
                           row.sourcePicks[source.id]?.value2 ?? "",
                           1
                         )}`}
                       />
                     </td>
+
                     <td className="px-2 py-3">
                       <input
                         value={row.sourcePicks[source.id]?.value3 ?? ""}
@@ -286,7 +377,7 @@ const RaceSheetTable = ({
                           )
                         }
                         className={`w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getPickHighlightClass(
-                          row.userPicks,
+                          row.winners,
                           row.sourcePicks[source.id]?.value3 ?? "",
                           2
                         )}`}

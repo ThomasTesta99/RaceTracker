@@ -53,19 +53,76 @@ export const getMetrics = async () => {
       )
       .groupBy(sources.id, sources.name);
 
+    const [userStats] = await db
+      .select({
+        totalRaces: count(races.id),
+
+        wins: sql<number>`
+          count(
+            case
+              when ${races.userPick1} = ${races.win1}
+              and ${races.win1} is not null
+              and ${races.userPick1} is not null
+              then 1
+            end
+          )
+        `,
+
+        losses: sql<number>`
+          count(
+            case
+              when ${races.userPick1} <> ${races.win1}
+              and ${races.win1} is not null
+              and ${races.userPick1} is not null
+              then 1
+            end
+          )
+        `,
+
+        winPercent: sql<number>`
+          case
+            when count(${races.id}) = 0 then 0
+            else round(
+              (
+                count(
+                  case
+                    when ${races.userPick1} = ${races.win1}
+                    and ${races.win1} is not null
+                    and ${races.userPick1} is not null
+                    then 1
+                  end
+                )::numeric
+                / count(${races.id})::numeric
+              ) * 100,
+              2
+            )
+          end
+        `,
+      })
+      .from(races)
+      .where(
+        and(
+          isNotNull(races.userPick1),
+          isNotNull(races.win1)
+        )
+      );
+
     return {
       success: true,
-      data: sourceStats,
+      data: {
+        sourceStats,
+        userStats,
+      },
     };
   } catch (error) {
-    console.error("Error fetching race data:", error);
+    console.error("Error fetching race metrics:", error);
 
     return {
       success: false,
       message:
         error instanceof Error
           ? error.message
-          : "Failed to load race day sources.",
+          : "Failed to load race metrics.",
     };
   }
 };

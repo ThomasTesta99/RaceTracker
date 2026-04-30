@@ -70,7 +70,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <section className="min-h-screen text-white">
-      <div className="mx-auto max-w-7xl space-y-10">
+      <div className="mx-auto space-y-10">
         <RaceSheetHeader
           raceDay={raceDay}
           allSources={raceDaySourcesResult.allSources}

@@ -4,7 +4,7 @@ import { db } from "@/database/drizzle";
 import { raceDays, raceDaySources, sources } from "@/database/schema";
 import { NewRaceDay } from "@/types";
 import { randomUUID } from "crypto";
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray } from "drizzle-orm";
 
 export const createRaceDay = async ({
   date,
@@ -50,7 +50,7 @@ export const createRaceDay = async ({
 
 export const getRaceDays = async () => {
   try {
-    const raceList = await db.select().from(raceDays).orderBy(raceDays.date);
+    const raceList = await db.select().from(raceDays).orderBy(desc(raceDays.date));
 
     if (raceList.length === 0) {
       return {

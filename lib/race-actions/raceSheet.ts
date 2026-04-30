@@ -23,6 +23,11 @@ const createEmptyRows = (sourcesList: Source[]): RaceRow[] => {
     return {
       raceNumber: index + 1,
       result: "",
+      winners: {
+        value1: "",
+        value2: "",
+        value3: "",
+      },
       userPicks: {
         value1: "",
         value2: "",
@@ -96,10 +101,15 @@ export const getRaceSheetData = async (raceDayId: string) => {
             existingRace.result === "scratch"
             ? existingRace.result
             : "",
+        winners: {
+          value1: existingRace.win1 ?? "",
+          value2: existingRace.win2 ?? "",
+          value3: existingRace.win3 ?? "",
+        },
         userPicks: {
-            value1: existingRace.win1 ?? "",
-            value2: existingRace.win2 ?? "",
-            value3: existingRace.win3 ?? "",
+          value1: existingRace.userPick1 ?? "",
+          value2: existingRace.userPick2 ?? "",
+          value3: existingRace.userPick3 ?? "",
         },
         sourcePicks,
         };
@@ -135,17 +145,27 @@ export const saveRaceSheet = async ({
           raceDayId,
           raceNumber: row.raceNumber,
           result: row.result || null,
-          win1: row.userPicks.value1 || null,
-          win2: row.userPicks.value2 || null,
-          win3: row.userPicks.value3 || null,
+
+          win1: row.winners.value1 || null,
+          win2: row.winners.value2 || null,
+          win3: row.winners.value3 || null,
+
+          userPick1: row.userPicks.value1 || null,
+          userPick2: row.userPicks.value2 || null,
+          userPick3: row.userPicks.value3 || null,
         })
         .onConflictDoUpdate({
           target: [races.raceDayId, races.raceNumber],
           set: {
             result: row.result || null,
-            win1: row.userPicks.value1 || null,
-            win2: row.userPicks.value2 || null,
-            win3: row.userPicks.value3 || null,
+
+            win1: row.winners.value1 || null,
+            win2: row.winners.value2 || null,
+            win3: row.winners.value3 || null,
+
+            userPick1: row.userPicks.value1 || null,
+            userPick2: row.userPicks.value2 || null,
+            userPick3: row.userPicks.value3 || null,
           },
         })
         .returning({

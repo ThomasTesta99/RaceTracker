@@ -61,6 +61,7 @@ export type RaceRow = {
   raceId?: string;
   raceNumber: number;
   result: RaceResultOption;
+  winners: PickTriple;
   userPicks: PickTriple;
   sourcePicks: Record<string, PickTriple>;
 };

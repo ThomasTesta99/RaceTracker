@@ -36,6 +36,13 @@
       "when": 1776283238650,
       "tag": "0004_loud_switch",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1777563934145,
+      "tag": "0005_confused_wolf_cub",
+      "breakpoints": true
     }
   ]
 }

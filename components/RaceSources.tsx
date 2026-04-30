@@ -42,9 +42,9 @@ const RaceSources = () => {
 
   if (loading) {
     return (
-      <section className="min-h-screen px-6 py-10 text-white">
+      <section className="min-h-screen px-4 py-8 sm:px-6 sm:py-10 text-white">
         <div className="mx-auto max-w-5xl">
-          <h1 className="text-4xl font-bold tracking-tight">Sources</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Sources</h1>
           <p className="mt-3 text-white/60">Loading sources...</p>
         </div>
       </section>
@@ -52,11 +52,11 @@ const RaceSources = () => {
   }
 
   return (
-    <section className="min-h-screen px-6 py-10 text-white">
+    <section className="min-h-screen px-4 py-8 sm:px-6 sm:py-10 text-white">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight">Sources</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Sources</h1>
             <p className="mt-2 text-white/60">
               Manage the sources your race data comes from.
             </p>
@@ -83,7 +83,7 @@ const RaceSources = () => {
               {sourcesList.map((source) => (
                 <div
                   key={source.id}
-                  className="flex items-center justify-between gap-4 px-6 py-4"
+                  className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-lg font-medium text-white">
@@ -94,7 +94,7 @@ const RaceSources = () => {
                     </p>
                   </div>
 
-                  <div className="flex flex-row gap-4">
+                  <div className="flex w-full flex-wrap gap-3 sm:w-auto sm:flex-row sm:justify-end">
                     <SourceDialog
                       source={source}
                       onSourceSaved={fetchSources}

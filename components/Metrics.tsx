@@ -99,7 +99,7 @@ const Metrics = () => {
     return (
       <section className="space-y-6">
         <div className="rounded-3xl border border-red-400/20 bg-red-500/10 p-6 backdrop-blur-xl">
-          <h1 className="text-2xl font-bold text-white">Metrics</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Metrics</h1>
           <p className="mt-2 text-sm text-red-200">{message}</p>
         </div>
       </section>
@@ -112,7 +112,7 @@ const Metrics = () => {
       <div>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               Metrics
             </h1>
 
@@ -146,7 +146,7 @@ const Metrics = () => {
               Win Rate
             </p>
 
-            <h2 className="mt-3 text-2xl font-bold text-white">
+            <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">
               {winPercent}%
             </h2>
 
@@ -160,7 +160,7 @@ const Metrics = () => {
               Wins
             </p>
 
-            <h2 className="mt-3 text-2xl font-bold text-white">{wins}</h2>
+            <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">{wins}</h2>
 
             <p className="mt-2 text-sm text-white/65">Marked as Win</p>
           </div>
@@ -170,7 +170,7 @@ const Metrics = () => {
               Losses
             </p>
 
-            <h2 className="mt-3 text-2xl font-bold text-white">{losses}</h2>
+            <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">{losses}</h2>
 
             <p className="mt-2 text-sm text-white/65">Marked as Loss</p>
           </div>
@@ -180,7 +180,7 @@ const Metrics = () => {
               Scratches
             </p>
 
-            <h2 className="mt-3 text-2xl font-bold text-white">{scratches}</h2>
+            <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">{scratches}</h2>
 
             <p className="mt-2 text-sm text-white/65">
               Ignored in win rate
@@ -192,7 +192,7 @@ const Metrics = () => {
               Record
             </p>
 
-            <h2 className="mt-3 text-2xl font-bold text-white">
+            <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">
               {wins}-{losses}
             </h2>
 
@@ -235,7 +235,7 @@ const Metrics = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-xl font-semibold text-white">
               Source Performance
             </h2>
@@ -249,7 +249,7 @@ const Metrics = () => {
                 Top Source
               </p>
 
-              <h2 className="mt-3 text-2xl font-bold text-white">
+              <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">
                 {topSource?.sourceName ?? "N/A"}
               </h2>
 
@@ -265,7 +265,7 @@ const Metrics = () => {
                 Average Source Accuracy
               </p>
 
-              <h2 className="mt-3 text-2xl font-bold text-white">
+              <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">
                 {averageAccuracy}%
               </h2>
 
@@ -279,7 +279,7 @@ const Metrics = () => {
                 Total Source Picks
               </p>
 
-              <h2 className="mt-3 text-2xl font-bold text-white">
+              <h2 className="mt-3 text-xl sm:text-2xl font-bold text-white">
                 {totalTrackedPicks}
               </h2>
 
@@ -314,7 +314,7 @@ const Metrics = () => {
                   </div>
 
                   <div className="text-left md:text-right">
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-xl sm:text-2xl font-bold text-white">
                       {stat.accuracyPercent}%
                     </p>
 

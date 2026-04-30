@@ -45,24 +45,24 @@ export const getMetrics = async () => {
       .from(racePicks)
       .innerJoin(races, eq(racePicks.raceId, races.id))
       .innerJoin(sources, eq(racePicks.sourceId, sources.id))
-      .where(
-        and(
-          isNotNull(racePicks.value1),
-          isNotNull(races.win1)
-        )
-      )
+      .where(and(isNotNull(racePicks.value1), isNotNull(races.win1)))
       .groupBy(sources.id, sources.name);
 
     const [userStats] = await db
       .select({
-        totalRaces: count(races.id),
+        totalRaces: sql<number>`
+          count(
+            case
+              when ${races.result} in ('win', 'loss')
+              then 1
+            end
+          )
+        `,
 
         wins: sql<number>`
           count(
             case
-              when ${races.userPick1} = ${races.win1}
-              and ${races.win1} is not null
-              and ${races.userPick1} is not null
+              when ${races.result} = 'win'
               then 1
             end
           )
@@ -71,9 +71,16 @@ export const getMetrics = async () => {
         losses: sql<number>`
           count(
             case
-              when ${races.userPick1} <> ${races.win1}
-              and ${races.win1} is not null
-              and ${races.userPick1} is not null
+              when ${races.result} = 'loss'
+              then 1
+            end
+          )
+        `,
+
+        scratches: sql<number>`
+          count(
+            case
+              when ${races.result} = 'scratch'
               then 1
             end
           )
@@ -81,31 +88,34 @@ export const getMetrics = async () => {
 
         winPercent: sql<number>`
           case
-            when count(${races.id}) = 0 then 0
+            when count(
+              case
+                when ${races.result} in ('win', 'loss')
+                then 1
+              end
+            ) = 0 then 0
             else round(
               (
                 count(
                   case
-                    when ${races.userPick1} = ${races.win1}
-                    and ${races.win1} is not null
-                    and ${races.userPick1} is not null
+                    when ${races.result} = 'win'
                     then 1
                   end
                 )::numeric
-                / count(${races.id})::numeric
+                /
+                count(
+                  case
+                    when ${races.result} in ('win', 'loss')
+                    then 1
+                  end
+                )::numeric
               ) * 100,
               2
             )
           end
         `,
       })
-      .from(races)
-      .where(
-        and(
-          isNotNull(races.userPick1),
-          isNotNull(races.win1)
-        )
-      );
+      .from(races);
 
     return {
       success: true,

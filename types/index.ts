@@ -84,3 +84,11 @@ export type SourceStat = {
   correctFirstPicks: number;
   accuracyPercent: number;
 };
+
+export type UserStat = {
+  totalRaces: number;
+  wins: number;
+  losses: number;
+  scratches: number;
+  winPercent: number;
+};

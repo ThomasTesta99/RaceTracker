@@ -61,3 +61,39 @@ export const getUserPickHighlightClass = (
 
   return "border-white/10 bg-black/30";
 };
+
+export const getWinnerHighlightClass = (
+  row: RaceRow,
+  winnerValue: string,
+  winnerIndex: 0 | 1 | 2
+) => {
+  const normalizedWinnerValue = winnerValue.trim();
+
+  if (!normalizedWinnerValue) {
+    return "border-white/10 bg-black/30";
+  }
+
+  const userPicks = [
+    row.userPicks.value1.trim(),
+    row.userPicks.value2.trim(),
+    row.userPicks.value3.trim(),
+  ];
+
+  const sourcePicks = Object.values(row.sourcePicks).flatMap((sourcePick) => [
+    sourcePick.value1.trim(),
+    sourcePick.value2.trim(),
+    sourcePick.value3.trim(),
+  ]);
+
+  const allPicks = [...userPicks, ...sourcePicks];
+
+  if (allPicks[winnerIndex] === normalizedWinnerValue) {
+    return "border-green-400/40 bg-green-500/30";
+  }
+
+  if (allPicks.includes(normalizedWinnerValue)) {
+    return "border-yellow-300/40 bg-yellow-400/30";
+  }
+
+  return "border-white/10 bg-black/30";
+};

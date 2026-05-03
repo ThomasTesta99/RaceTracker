@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { getPickHighlightClass, getUserPickHighlightClass } from "@/lib/utils";
+import { getPickHighlightClass, getUserPickHighlightClass, getWinnerHighlightClass } from "@/lib/utils";
 
 const RaceSheetTable = ({
   raceDayId,
@@ -257,7 +257,11 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateWinner(row.raceNumber, "value1", e.target.value)
                     }
-                    className="w-14 sm:w-16 rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-center text-white outline-none"
+                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getWinnerHighlightClass(
+                      row,
+                      row.winners.value1,
+                      0
+                    )}`}
                   />
                 </td>
 
@@ -267,7 +271,11 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateWinner(row.raceNumber, "value2", e.target.value)
                     }
-                    className="w-14 sm:w-16 rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-center text-white outline-none"
+                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getWinnerHighlightClass(
+                      row,
+                      row.winners.value2,
+                      1
+                    )}`}
                   />
                 </td>
 
@@ -277,7 +285,11 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateWinner(row.raceNumber, "value3", e.target.value)
                     }
-                    className="w-14 sm:w-16 rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-center text-white outline-none"
+                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getWinnerHighlightClass(
+                      row,
+                      row.winners.value3,
+                      2
+                    )}`}
                   />
                 </td>
 

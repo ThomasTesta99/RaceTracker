@@ -186,19 +186,16 @@ const RaceSheetTable = ({
             </tr>
 
             <tr className="border-b border-white/10 bg-white/5 text-white/70">
-              {/* Winners headers */}
               <th className="px-3 py-2 text-center font-medium">1st</th>
               <th className="px-3 py-2 text-center font-medium">2nd</th>
               <th className="px-3 py-2 text-center font-medium">3rd</th>
 
-              {/* My Picks headers */}
               <th className="border-l border-white/20 px-3 py-2 text-center font-medium">
                 1st
               </th>
               <th className="px-3 py-2 text-center font-medium">2nd</th>
               <th className="px-3 py-2 text-center font-medium">3rd</th>
 
-              {/* Source headers */}
               {sources.map((source) => (
                 <React.Fragment key={source.id}>
                   <th className="border-l border-white/20 px-3 py-2 text-center font-medium">
@@ -225,7 +222,13 @@ const RaceSheetTable = ({
                         updateResult(row.raceNumber, value as RaceResultOption)
                       }
                     >
-                      <SelectTrigger className="w-full border-white/10 bg-black/30 text-sm text-white">
+                      <SelectTrigger
+                        className={`w-full text-sm text-white transition ${
+                          row.result === "win"
+                            ? "border-green-400/60 bg-green-500/20 shadow-[0_0_16px_rgba(34,197,94,0.45)]"
+                            : "border-white/10 bg-black/30"
+                        }`}
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
 

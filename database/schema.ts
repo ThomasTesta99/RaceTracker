@@ -99,11 +99,20 @@ export const raceDaySources = pgTable(
   ]
 );
 
+export const leaguePool = pgTable("league_pool", {
+  id: text("id").primaryKey(),
+  date: date("date").notNull().defaultNow(),
+},
+  (table) => [
+    index("league_pool_date_idx").on(table.date),
+  ]
+);
+
 export const leaguePoolEntries = pgTable("league_pool_entries", {
   id: text("id").primaryKey(),
   team: text("team").notNull(), 
   name: text("name").notNull(),
-  date: date("date").notNull().defaultNow(),
+  leaguePoolId: text("league_pool_id").notNull().references(() => leaguePool.id, { onDelete: "cascade" }),
   number0Color: text("number_0_color"),
   number1Color: text("number_1_color"),
   number2Color: text("number_2_color"),
@@ -116,18 +125,20 @@ export const leaguePoolEntries = pgTable("league_pool_entries", {
   number9Color: text("number_9_color"),
   number10Color: text("number_10_color"),
 },
-  (table) => ({
-    dateIdx: index("league_pool_entries_date_idx").on(table.date),
-
-    teamIdx: index("league_pool_entries_team_idx").on(table.team),
-
-    nameIdx: index("league_pool_entries_name_idx").on(table.name),
-
-    dateTeamIdx: index("league_pool_entries_date_team_idx").on(
-      table.date,
+  (table) => [
+    index("league_pool_entries_pool_idx").on(table.leaguePoolId),
+    index("league_pool_entries_team_idx").on(table.team),
+    index("league_pool_entries_name_idx").on(table.name),
+    index("league_pool_entries_pool_team_idx").on(
+      table.leaguePoolId,
       table.team
     ),
-  }));
+    index("league_pool_entries_pool_name_idx").on(
+      table.leaguePoolId,
+      table.name
+    ),
+  ]
+);
 
 export const schema = {
   raceDays,
@@ -135,5 +146,6 @@ export const schema = {
   sources,
   raceDaySources,
   racePicks,
+  leaguePool, 
   leaguePoolEntries
 };

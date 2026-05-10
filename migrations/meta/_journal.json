@@ -50,6 +50,13 @@
       "when": 1777565257199,
       "tag": "0006_demonic_stone_men",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1778439879221,
+      "tag": "0007_glossy_vin_gonzales",
+      "breakpoints": true
     }
   ]
 }

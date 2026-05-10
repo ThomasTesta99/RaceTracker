@@ -1,4 +1,5 @@
 import { leaguePool, leaguePoolEntries, raceDays, raceDaySources, racePicks, races, sources } from "@/database/schema";
+import { ReactNode } from "react";
 
 export type RaceResult = "win" | "loss" | "scratch";
 
@@ -114,4 +115,20 @@ export type UpdateLeaguePoolEntryInput = {
   number8Color?: string | null;
   number9Color?: string | null;
   number10Color?: string | null;
+};
+
+export type GetLeaguePoolsResponse = {
+  success: boolean;
+  leaguePools?: LeaguePool[];
+  message?: string;
+};
+
+export type CreateLeaguePoolEntryProps = {
+  leaguePoolId: string;
+  trigger?: ReactNode;
+};
+
+export type CreateLeaguePoolEntryFormProps = {
+  leaguePoolId: string;
+  onSuccess?: () => void;
 };

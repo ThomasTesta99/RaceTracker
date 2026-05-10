@@ -51,6 +51,39 @@ export const getLeaguePools = async () => {
   }
 };
 
+export const getLeaguePoolById = async (id: string) => {
+  try {
+    const [pool] = await db
+      .select()
+      .from(leaguePool)
+      .where(eq(leaguePool.id, id));
+
+    if (!pool) {
+      return {
+        success: false,
+        message: "League pool not found.",
+        leaguePool: null,
+      };
+    }
+
+    return {
+      success: true,
+      leaguePool: pool,
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "There was an error getting the league pool.",
+      leaguePool: null,
+    };
+  }
+};
+
 export const deleteLeaguePool = async (id: string) => {
     try {
         await db.delete(leaguePool).where(eq(leaguePool.id, id));

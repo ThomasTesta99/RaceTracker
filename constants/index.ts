@@ -25,7 +25,7 @@ export const sidebarLinks = [
     },
     {
         icon: TrophyIcon, 
-        route: '/league-pool', 
+        route: '/league-pools', 
         label: 'League Pool',
     }
 ]

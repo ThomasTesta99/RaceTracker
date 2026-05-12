@@ -16,10 +16,13 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (!leaguePoolResult.success || !leaguePoolResult.leaguePool) {
     return (
-      <section className="min-h-screen px-6 py-10 text-white">
-        <div className="mx-auto max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/10 p-6">
-          <h1 className="text-xl font-semibold">Unable to load league pool</h1>
-          <p className="mt-2 text-white/70">
+      <section className="min-h-screen px-4 py-6 text-white sm:px-6 sm:py-10">
+        <div className="mx-auto max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/10 p-4 sm:p-6">
+          <h1 className="text-lg font-semibold sm:text-xl">
+            Unable to load league pool
+          </h1>
+
+          <p className="mt-2 text-sm text-white/70 sm:text-base">
             {leaguePoolResult.message ?? "Something went wrong."}
           </p>
         </div>
@@ -29,12 +32,13 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (!entriesResult.success || !entriesResult.entries) {
     return (
-      <section className="min-h-screen px-6 py-10 text-white">
-        <div className="mx-auto max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/10 p-6">
-          <h1 className="text-xl font-semibold">
+      <section className="min-h-screen px-4 py-6 text-white sm:px-6 sm:py-10">
+        <div className="mx-auto max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/10 p-4 sm:p-6">
+          <h1 className="text-lg font-semibold sm:text-xl">
             Unable to load league pool entries
           </h1>
-          <p className="mt-2 text-white/70">
+
+          <p className="mt-2 text-sm text-white/70 sm:text-base">
             {entriesResult.message ?? "Something went wrong."}
           </p>
         </div>
@@ -46,33 +50,45 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const entries = entriesResult.entries;
 
   return (
-    <section className="min-h-screen text-white">
-      <div className="mx-auto space-y-10">
-
-        <div className="flex items-center justify-between">
-          <div className="rounded-3xl border border-white/10 bg-black/40 p-6 shadow-2xl backdrop-blur-xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-white/40">
+    <section className="min-h-screen px-4 py-6 text-white sm:px-6 sm:py-8 lg:px-10">
+      <div className="mx-auto w-full max-w-7xl space-y-6 sm:space-y-8 lg:space-y-10">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="w-full bg-black/40 p-5 shadow-2xl backdrop-blur-xl sm:p-6 lg:w-auto lg:min-w-[360px]">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/40 sm:text-sm sm:tracking-[0.25em]">
               Baseball League Pool
             </p>
 
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-white">
+            <h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
               League Pool
             </h1>
 
-            <p className="mt-3 text-white/60">{leaguePool.date}</p>
+            <p className="mt-3 text-sm text-white/60 sm:text-base">
+              {leaguePool.date}
+            </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <CreateLeaguePoolEntry leaguePoolId={leaguePoolId} />
-            <DeleteLeaguePoolButton leaguePoolId={leaguePoolId} />
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto">
+            <div className="w-full sm:w-auto">
+              <CreateLeaguePoolEntry leaguePoolId={leaguePoolId} />
+            </div>
+
+            <div className="w-full sm:w-auto">
+              <DeleteLeaguePoolButton leaguePoolId={leaguePoolId} />
+            </div>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-black/40 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="rounded-3xl border border-white/10 bg-black/40 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
           {entries.length === 0 ? (
-            <p className="text-white/60">No entries found for this pool.</p>
+            <p className="text-sm text-white/60 sm:text-base">
+              No entries found for this pool.
+            </p>
           ) : (
-            <LeaguePoolTable entries={entries} />
+            <div className="w-full overflow-x-auto">
+              <div className="min-w-[700px]">
+                <LeaguePoolTable entries={entries} />
+              </div>
+            </div>
           )}
         </div>
       </div>

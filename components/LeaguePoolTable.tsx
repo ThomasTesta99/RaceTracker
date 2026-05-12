@@ -219,28 +219,29 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-2xl border border-white/20">
-        <table className="w-full min-w-[1150px] border-collapse text-left">
+      {/* Desktop / Tablet Table */}
+      <div className="hidden overflow-x-auto rounded-2xl border border-white/20 md:block">
+        <table className="w-full min-w-[900px] border-collapse text-left">
           <thead>
             <tr className="bg-white/10 text-white">
-              <th className="border border-white/20 px-5 py-4 text-xl font-bold">
+              <th className="border border-white/20 px-3 py-3 text-base font-bold lg:px-5 lg:py-4 lg:text-xl">
                 Team
               </th>
 
-              <th className="border border-white/20 px-5 py-4 text-xl font-bold">
+              <th className="border border-white/20 px-3 py-3 text-base font-bold lg:px-5 lg:py-4 lg:text-xl">
                 Name
               </th>
 
               {Array.from({ length: 11 }, (_, index) => (
                 <th
                   key={index}
-                  className="border border-white/20 px-5 py-4 text-center text-xl font-bold"
+                  className="border border-white/20 px-2 py-3 text-center text-base font-bold lg:px-5 lg:py-4 lg:text-xl"
                 >
                   {index}
                 </th>
               ))}
 
-              <th className="border border-white/20 px-5 py-4 text-center text-xl font-bold">
+              <th className="border border-white/20 px-3 py-3 text-center text-base font-bold lg:px-5 lg:py-4 lg:text-xl">
                 Actions
               </th>
             </tr>
@@ -248,12 +249,12 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
 
           <tbody>
             {entries.map((entry) => (
-              <tr key={entry.id} className="text-lg text-white">
-                <td className="border border-white/20 px-5 py-4 text-xl font-semibold">
+              <tr key={entry.id} className="text-white">
+                <td className="border border-white/20 px-3 py-3 text-base font-semibold lg:px-5 lg:py-4 lg:text-xl">
                   {entry.team}
                 </td>
 
-                <td className="border border-white/20 px-5 py-4 text-xl font-medium text-white/85">
+                <td className="border border-white/20 px-3 py-3 text-base font-medium text-white/85 lg:px-5 lg:py-4 lg:text-xl">
                   {entry.name}
                 </td>
 
@@ -271,7 +272,7 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
                       <button
                         type="button"
                         onClick={() => openColorDialog(entry, index, colorKey)}
-                        className="flex h-16 w-full cursor-pointer items-center justify-center text-xl font-bold"
+                        className="flex h-12 w-full cursor-pointer items-center justify-center text-base font-bold lg:h-16 lg:text-xl"
                       >
                         {index}
                       </button>
@@ -279,12 +280,12 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
                   );
                 })}
 
-                <td className="border border-white/20 px-5 py-4">
+                <td className="border border-white/20 px-3 py-3 lg:px-5 lg:py-4">
                   <div className="flex items-center justify-center gap-2">
                     <button
                       type="button"
                       onClick={() => openEditDialog(entry)}
-                      className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
+                      className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/20 lg:text-sm"
                     >
                       <Pencil className="h-4 w-4" />
                       Edit
@@ -293,7 +294,7 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
                     <button
                       type="button"
                       onClick={() => openDeleteDialog(entry)}
-                      className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-red-400/30 bg-red-500/15 px-3 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/25"
+                      className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-red-400/30 bg-red-500/15 px-3 py-2 text-xs font-semibold text-red-200 transition hover:bg-red-500/25 lg:text-sm"
                     >
                       <Trash2 className="h-4 w-4" />
                       Delete
@@ -306,10 +307,76 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
         </table>
       </div>
 
+      {/* Mobile Cards */}
+      <div className="space-y-4 md:hidden">
+        {entries.map((entry) => (
+          <div
+            key={entry.id}
+            className="rounded-2xl border border-white/15 bg-black/30 p-4"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                  Team
+                </p>
+
+                <h3 className="mt-1 truncate text-lg font-bold text-white">
+                  {entry.team}
+                </h3>
+
+                <p className="mt-1 truncate text-sm font-medium text-white/70">
+                  {entry.name}
+                </p>
+              </div>
+
+              <div className="flex shrink-0 items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openEditDialog(entry)}
+                  className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-white/15 bg-white/10 text-white transition hover:bg-white/20"
+                  aria-label="Edit entry"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => openDeleteDialog(entry)}
+                  className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-red-400/30 bg-red-500/15 text-red-200 transition hover:bg-red-500/25"
+                  aria-label="Delete entry"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-4 gap-2">
+              {numberColorKeys.map((colorKey, index) => {
+                const color = entry[colorKey];
+
+                return (
+                  <button
+                    key={colorKey}
+                    type="button"
+                    onClick={() => openColorDialog(entry, index, colorKey)}
+                    className={cn(
+                      "flex h-12 cursor-pointer items-center justify-center rounded-xl border border-white/15 text-base font-bold transition",
+                      getColorClass(color)
+                    )}
+                  >
+                    {index}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <Dialog open={colorDialogOpen} onOpenChange={setColorDialogOpen}>
-        <DialogContent className="max-w-md border border-white/10 bg-zinc-950 text-white shadow-2xl [&>button]:text-white/70 [&>button]:hover:cursor-pointer">
+        <DialogContent className="max-w-[calc(100vw-2rem)] border border-white/10 bg-zinc-950 text-white shadow-2xl sm:max-w-md [&>button]:text-white/70 [&>button]:hover:cursor-pointer">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-semibold">
+            <DialogTitle className="text-xl font-semibold sm:text-2xl">
               Set Number Color
             </DialogTitle>
           </DialogHeader>
@@ -317,15 +384,19 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
           <div className="space-y-4">
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
               <p className="text-sm text-white/50">Entry</p>
-              <p className="mt-1 text-lg font-semibold">
+
+              <p className="mt-1 text-base font-semibold sm:text-lg">
                 {selectedEntry?.team} - {selectedEntry?.name}
               </p>
 
               <p className="mt-3 text-sm text-white/50">Number</p>
-              <p className="mt-1 text-3xl font-bold">{selectedNumber}</p>
+
+              <p className="mt-1 text-2xl font-bold sm:text-3xl">
+                {selectedNumber}
+              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {colorOptions.map((option) => (
                 <Button
                   key={option.label}
@@ -348,19 +419,16 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
       </Dialog>
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-md border border-white/10 bg-zinc-950 text-white shadow-2xl [&>button]:text-white/70 [&>button]:hover:cursor-pointer">
+        <DialogContent className="max-w-[calc(100vw-2rem)] border border-white/10 bg-zinc-950 text-white shadow-2xl sm:max-w-md [&>button]:text-white/70 [&>button]:hover:cursor-pointer">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-semibold">
+            <DialogTitle className="text-xl font-semibold sm:text-2xl">
               Edit Entry
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4">
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="edit-team"
-                className="text-sm font-medium text-white"
-              >
+              <label htmlFor="edit-team" className="text-sm font-medium text-white">
                 Team
               </label>
 
@@ -375,10 +443,7 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="edit-name"
-                className="text-sm font-medium text-white"
-              >
+              <label htmlFor="edit-name" className="text-sm font-medium text-white">
                 Name
               </label>
 
@@ -407,15 +472,15 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
       </Dialog>
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="max-w-md border border-white/10 bg-zinc-950 text-white shadow-2xl [&>button]:text-white/70 [&>button]:hover:cursor-pointer">
+        <DialogContent className="max-w-[calc(100vw-2rem)] border border-white/10 bg-zinc-950 text-white shadow-2xl sm:max-w-md [&>button]:text-white/70 [&>button]:hover:cursor-pointer">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-semibold">
+            <DialogTitle className="text-xl font-semibold sm:text-2xl">
               Delete Entry
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4">
-            <p className="text-white/70">
+            <p className="text-sm text-white/70 sm:text-base">
               Are you sure you want to delete{" "}
               <span className="font-semibold text-white">
                 {entryToDelete?.team} - {entryToDelete?.name}
@@ -423,7 +488,7 @@ const LeaguePoolTable = ({ entries }: LeaguePoolTableProps) => {
               ?
             </p>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Button
                 type="button"
                 variant="outline"

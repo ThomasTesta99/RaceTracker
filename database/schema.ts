@@ -99,10 +99,53 @@ export const raceDaySources = pgTable(
   ]
 );
 
+export const leaguePool = pgTable("league_pool", {
+  id: text("id").primaryKey(),
+  date: date("date").notNull().defaultNow(),
+},
+  (table) => [
+    index("league_pool_date_idx").on(table.date),
+  ]
+);
+
+export const leaguePoolEntries = pgTable("league_pool_entries", {
+  id: text("id").primaryKey(),
+  team: text("team").notNull(), 
+  name: text("name").notNull(),
+  leaguePoolId: text("league_pool_id").notNull().references(() => leaguePool.id, { onDelete: "cascade" }),
+  number0Color: text("number_0_color"),
+  number1Color: text("number_1_color"),
+  number2Color: text("number_2_color"),
+  number3Color: text("number_3_color"),
+  number4Color: text("number_4_color"),
+  number5Color: text("number_5_color"),
+  number6Color: text("number_6_color"),
+  number7Color: text("number_7_color"),
+  number8Color: text("number_8_color"),
+  number9Color: text("number_9_color"),
+  number10Color: text("number_10_color"),
+},
+  (table) => [
+    index("league_pool_entries_pool_idx").on(table.leaguePoolId),
+    index("league_pool_entries_team_idx").on(table.team),
+    index("league_pool_entries_name_idx").on(table.name),
+    index("league_pool_entries_pool_team_idx").on(
+      table.leaguePoolId,
+      table.team
+    ),
+    index("league_pool_entries_pool_name_idx").on(
+      table.leaguePoolId,
+      table.name
+    ),
+  ]
+);
+
 export const schema = {
   raceDays,
   races,
   sources,
   raceDaySources,
   racePicks,
+  leaguePool, 
+  leaguePoolEntries
 };

@@ -1,4 +1,5 @@
-import { raceDays, raceDaySources, racePicks, races, sources } from "@/database/schema";
+import { leaguePool, leaguePoolEntries, raceDays, raceDaySources, racePicks, races, sources } from "@/database/schema";
+import { ReactNode } from "react";
 
 export type RaceResult = "win" | "loss" | "scratch";
 
@@ -16,6 +17,13 @@ export type NewSource = typeof sources.$inferInsert;
 
 export type RaceDaySource = typeof raceDaySources.$inferSelect;
 export type NewRaceDaySource = typeof raceDaySources.$inferInsert;
+
+export type LeaguePool = typeof leaguePool.$inferSelect;
+export type NewLeaguePool = typeof leaguePool.$inferInsert;
+
+export type LeaguePoolEntry = typeof leaguePoolEntries.$inferSelect;
+export type NewLeaguePoolEntry = typeof leaguePoolEntries.$inferInsert;
+
 
 export type GetRaceDayResponse =
   | {
@@ -91,4 +99,36 @@ export type UserStat = {
   losses: number;
   scratches: number;
   winPercent: number;
+};
+
+export type UpdateLeaguePoolEntryInput = {
+  team?: string;
+  name?: string;
+  number0Color?: string | null;
+  number1Color?: string | null;
+  number2Color?: string | null;
+  number3Color?: string | null;
+  number4Color?: string | null;
+  number5Color?: string | null;
+  number6Color?: string | null;
+  number7Color?: string | null;
+  number8Color?: string | null;
+  number9Color?: string | null;
+  number10Color?: string | null;
+};
+
+export type GetLeaguePoolsResponse = {
+  success: boolean;
+  leaguePools?: LeaguePool[];
+  message?: string;
+};
+
+export type CreateLeaguePoolEntryProps = {
+  leaguePoolId: string;
+  trigger?: ReactNode;
+};
+
+export type CreateLeaguePoolEntryFormProps = {
+  leaguePoolId: string;
+  onSuccess?: () => void;
 };

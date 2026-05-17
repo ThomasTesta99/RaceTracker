@@ -88,9 +88,14 @@ export type RaceSheetPageData = {
 export type SourceStat = {
   sourceId: string;
   sourceName: string;
+
   totalPicks: number;
   correctFirstPicks: number;
   accuracyPercent: number;
+
+  itmHits: number;
+  itmTotalNumbers: number;
+  itmPercent: number;
 };
 
 export type UserStat = {
@@ -99,6 +104,10 @@ export type UserStat = {
   losses: number;
   scratches: number;
   winPercent: number;
+
+  userItmHits: number;
+  userItmTotalNumbers: number;
+  userItmPercent: number;
 };
 
 export type UpdateLeaguePoolEntryInput = {

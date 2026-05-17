@@ -11,13 +11,22 @@ export const getMetrics = async () => {
         sourceId: sources.id,
         sourceName: sources.name,
 
-        totalPicks: count(racePicks.id),
+        totalPicks: sql<number>`
+          count(
+            case
+              when nullif(trim(${racePicks.value1}), '') is not null
+              and nullif(trim(${races.win1}), '') is not null
+              then 1
+            end
+          )
+        `,
 
         correctFirstPicks: sql<number>`
           count(
             case
-              when ${racePicks.value1} = ${races.win1}
-              and ${races.win1} is not null
+              when trim(${racePicks.value1}) = trim(${races.win1})
+              and nullif(trim(${racePicks.value1}), '') is not null
+              and nullif(trim(${races.win1}), '') is not null
               then 1
             end
           )
@@ -25,17 +34,233 @@ export const getMetrics = async () => {
 
         accuracyPercent: sql<number>`
           case
-            when count(${racePicks.id}) = 0 then 0
+            when count(
+              case
+                when nullif(trim(${racePicks.value1}), '') is not null
+                and nullif(trim(${races.win1}), '') is not null
+                then 1
+              end
+            ) = 0 then 0
             else round(
               (
                 count(
                   case
-                    when ${racePicks.value1} = ${races.win1}
-                    and ${races.win1} is not null
+                    when trim(${racePicks.value1}) = trim(${races.win1})
+                    and nullif(trim(${racePicks.value1}), '') is not null
+                    and nullif(trim(${races.win1}), '') is not null
                     then 1
                   end
                 )::numeric
-                / count(${racePicks.id})::numeric
+                /
+                count(
+                  case
+                    when nullif(trim(${racePicks.value1}), '') is not null
+                    and nullif(trim(${races.win1}), '') is not null
+                    then 1
+                  end
+                )::numeric
+              ) * 100,
+              2
+            )
+          end
+        `,
+
+        itmHits: sql<number>`
+          (
+            count(
+              case
+                when nullif(trim(${racePicks.value1}), '') is not null
+                and (
+                  trim(${racePicks.value1}) = trim(${races.win1})
+                  or trim(${racePicks.value1}) = trim(${races.win2})
+                  or trim(${racePicks.value1}) = trim(${races.win3})
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${racePicks.value2}), '') is not null
+                and (
+                  trim(${racePicks.value2}) = trim(${races.win1})
+                  or trim(${racePicks.value2}) = trim(${races.win2})
+                  or trim(${racePicks.value2}) = trim(${races.win3})
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${racePicks.value3}), '') is not null
+                and (
+                  trim(${racePicks.value3}) = trim(${races.win1})
+                  or trim(${racePicks.value3}) = trim(${races.win2})
+                  or trim(${racePicks.value3}) = trim(${races.win3})
+                )
+                then 1
+              end
+            )
+          )
+        `,
+
+        itmTotalNumbers: sql<number>`
+          (
+            count(
+              case
+                when nullif(trim(${racePicks.value1}), '') is not null
+                and (
+                  nullif(trim(${races.win1}), '') is not null
+                  or nullif(trim(${races.win2}), '') is not null
+                  or nullif(trim(${races.win3}), '') is not null
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${racePicks.value2}), '') is not null
+                and (
+                  nullif(trim(${races.win1}), '') is not null
+                  or nullif(trim(${races.win2}), '') is not null
+                  or nullif(trim(${races.win3}), '') is not null
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${racePicks.value3}), '') is not null
+                and (
+                  nullif(trim(${races.win1}), '') is not null
+                  or nullif(trim(${races.win2}), '') is not null
+                  or nullif(trim(${races.win3}), '') is not null
+                )
+                then 1
+              end
+            )
+          )
+        `,
+
+        itmPercent: sql<number>`
+          case
+            when (
+              count(
+                case
+                  when nullif(trim(${racePicks.value1}), '') is not null
+                  and (
+                    nullif(trim(${races.win1}), '') is not null
+                    or nullif(trim(${races.win2}), '') is not null
+                    or nullif(trim(${races.win3}), '') is not null
+                  )
+                  then 1
+                end
+              )
+              +
+              count(
+                case
+                  when nullif(trim(${racePicks.value2}), '') is not null
+                  and (
+                    nullif(trim(${races.win1}), '') is not null
+                    or nullif(trim(${races.win2}), '') is not null
+                    or nullif(trim(${races.win3}), '') is not null
+                  )
+                  then 1
+                end
+              )
+              +
+              count(
+                case
+                  when nullif(trim(${racePicks.value3}), '') is not null
+                  and (
+                    nullif(trim(${races.win1}), '') is not null
+                    or nullif(trim(${races.win2}), '') is not null
+                    or nullif(trim(${races.win3}), '') is not null
+                  )
+                  then 1
+                end
+              )
+            ) = 0 then 0
+            else round(
+              (
+                (
+                  count(
+                    case
+                      when nullif(trim(${racePicks.value1}), '') is not null
+                      and (
+                        trim(${racePicks.value1}) = trim(${races.win1})
+                        or trim(${racePicks.value1}) = trim(${races.win2})
+                        or trim(${racePicks.value1}) = trim(${races.win3})
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${racePicks.value2}), '') is not null
+                      and (
+                        trim(${racePicks.value2}) = trim(${races.win1})
+                        or trim(${racePicks.value2}) = trim(${races.win2})
+                        or trim(${racePicks.value2}) = trim(${races.win3})
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${racePicks.value3}), '') is not null
+                      and (
+                        trim(${racePicks.value3}) = trim(${races.win1})
+                        or trim(${racePicks.value3}) = trim(${races.win2})
+                        or trim(${racePicks.value3}) = trim(${races.win3})
+                      )
+                      then 1
+                    end
+                  )
+                )::numeric
+                /
+                (
+                  count(
+                    case
+                      when nullif(trim(${racePicks.value1}), '') is not null
+                      and (
+                        nullif(trim(${races.win1}), '') is not null
+                        or nullif(trim(${races.win2}), '') is not null
+                        or nullif(trim(${races.win3}), '') is not null
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${racePicks.value2}), '') is not null
+                      and (
+                        nullif(trim(${races.win1}), '') is not null
+                        or nullif(trim(${races.win2}), '') is not null
+                        or nullif(trim(${races.win3}), '') is not null
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${racePicks.value3}), '') is not null
+                      and (
+                        nullif(trim(${races.win1}), '') is not null
+                        or nullif(trim(${races.win2}), '') is not null
+                        or nullif(trim(${races.win3}), '') is not null
+                      )
+                      then 1
+                    end
+                  )
+                )::numeric
               ) * 100,
               2
             )
@@ -45,7 +270,6 @@ export const getMetrics = async () => {
       .from(racePicks)
       .innerJoin(races, eq(racePicks.raceId, races.id))
       .innerJoin(sources, eq(racePicks.sourceId, sources.id))
-      .where(and(isNotNull(racePicks.value1), isNotNull(races.win1)))
       .groupBy(sources.id, sources.name);
 
     const [userStats] = await db
@@ -108,6 +332,208 @@ export const getMetrics = async () => {
                     when ${races.result} in ('win', 'loss')
                     then 1
                   end
+                )::numeric
+              ) * 100,
+              2
+            )
+          end
+        `,
+
+        userItmHits: sql<number>`
+          (
+            count(
+              case
+                when nullif(trim(${races.userPick1}), '') is not null
+                and (
+                  trim(${races.userPick1}) = trim(${races.win1})
+                  or trim(${races.userPick1}) = trim(${races.win2})
+                  or trim(${races.userPick1}) = trim(${races.win3})
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${races.userPick2}), '') is not null
+                and (
+                  trim(${races.userPick2}) = trim(${races.win1})
+                  or trim(${races.userPick2}) = trim(${races.win2})
+                  or trim(${races.userPick2}) = trim(${races.win3})
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${races.userPick3}), '') is not null
+                and (
+                  trim(${races.userPick3}) = trim(${races.win1})
+                  or trim(${races.userPick3}) = trim(${races.win2})
+                  or trim(${races.userPick3}) = trim(${races.win3})
+                )
+                then 1
+              end
+            )
+          )
+        `,
+
+        userItmTotalNumbers: sql<number>`
+          (
+            count(
+              case
+                when nullif(trim(${races.userPick1}), '') is not null
+                and (
+                  nullif(trim(${races.win1}), '') is not null
+                  or nullif(trim(${races.win2}), '') is not null
+                  or nullif(trim(${races.win3}), '') is not null
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${races.userPick2}), '') is not null
+                and (
+                  nullif(trim(${races.win1}), '') is not null
+                  or nullif(trim(${races.win2}), '') is not null
+                  or nullif(trim(${races.win3}), '') is not null
+                )
+                then 1
+              end
+            )
+            +
+            count(
+              case
+                when nullif(trim(${races.userPick3}), '') is not null
+                and (
+                  nullif(trim(${races.win1}), '') is not null
+                  or nullif(trim(${races.win2}), '') is not null
+                  or nullif(trim(${races.win3}), '') is not null
+                )
+                then 1
+              end
+            )
+          )
+        `,
+
+        userItmPercent: sql<number>`
+          case
+            when (
+              count(
+                case
+                  when nullif(trim(${races.userPick1}), '') is not null
+                  and (
+                    nullif(trim(${races.win1}), '') is not null
+                    or nullif(trim(${races.win2}), '') is not null
+                    or nullif(trim(${races.win3}), '') is not null
+                  )
+                  then 1
+                end
+              )
+              +
+              count(
+                case
+                  when nullif(trim(${races.userPick2}), '') is not null
+                  and (
+                    nullif(trim(${races.win1}), '') is not null
+                    or nullif(trim(${races.win2}), '') is not null
+                    or nullif(trim(${races.win3}), '') is not null
+                  )
+                  then 1
+                end
+              )
+              +
+              count(
+                case
+                  when nullif(trim(${races.userPick3}), '') is not null
+                  and (
+                    nullif(trim(${races.win1}), '') is not null
+                    or nullif(trim(${races.win2}), '') is not null
+                    or nullif(trim(${races.win3}), '') is not null
+                  )
+                  then 1
+                end
+              )
+            ) = 0 then 0
+            else round(
+              (
+                (
+                  count(
+                    case
+                      when nullif(trim(${races.userPick1}), '') is not null
+                      and (
+                        trim(${races.userPick1}) = trim(${races.win1})
+                        or trim(${races.userPick1}) = trim(${races.win2})
+                        or trim(${races.userPick1}) = trim(${races.win3})
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${races.userPick2}), '') is not null
+                      and (
+                        trim(${races.userPick2}) = trim(${races.win1})
+                        or trim(${races.userPick2}) = trim(${races.win2})
+                        or trim(${races.userPick2}) = trim(${races.win3})
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${races.userPick3}), '') is not null
+                      and (
+                        trim(${races.userPick3}) = trim(${races.win1})
+                        or trim(${races.userPick3}) = trim(${races.win2})
+                        or trim(${races.userPick3}) = trim(${races.win3})
+                      )
+                      then 1
+                    end
+                  )
+                )::numeric
+                /
+                (
+                  count(
+                    case
+                      when nullif(trim(${races.userPick1}), '') is not null
+                      and (
+                        nullif(trim(${races.win1}), '') is not null
+                        or nullif(trim(${races.win2}), '') is not null
+                        or nullif(trim(${races.win3}), '') is not null
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${races.userPick2}), '') is not null
+                      and (
+                        nullif(trim(${races.win1}), '') is not null
+                        or nullif(trim(${races.win2}), '') is not null
+                        or nullif(trim(${races.win3}), '') is not null
+                      )
+                      then 1
+                    end
+                  )
+                  +
+                  count(
+                    case
+                      when nullif(trim(${races.userPick3}), '') is not null
+                      and (
+                        nullif(trim(${races.win1}), '') is not null
+                        or nullif(trim(${races.win2}), '') is not null
+                        or nullif(trim(${races.win3}), '') is not null
+                      )
+                      then 1
+                    end
+                  )
                 )::numeric
               ) * 100,
               2

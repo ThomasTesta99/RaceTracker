@@ -1,7 +1,12 @@
 "use client";
 
 import { saveRaceSheet } from "@/lib/race-actions/raceSheet";
-import { RaceResultOption, RaceRow, RaceSheetTableProps } from "@/types";
+import {
+  PickField,
+  RaceResultOption,
+  RaceRow,
+  RaceSheetTableProps,
+} from "@/types";
 import { useState, useTransition } from "react";
 import RaceSheetTableHead from "./RaceSheetTableHead";
 import RaceSheetRow from "./RaceSheetRow";
@@ -29,7 +34,7 @@ const RaceSheetTable = ({
 
   const updateWinner = (
     raceNumber: number,
-    field: "value1" | "value2" | "value3",
+    field: PickField,
     value: string
   ) => {
     setRows((prev) =>
@@ -69,7 +74,7 @@ const RaceSheetTable = ({
 
   const updateUserPick = (
     raceNumber: number,
-    field: "value1" | "value2" | "value3",
+    field: PickField,
     value: string
   ) => {
     setRows((prev) =>
@@ -90,7 +95,7 @@ const RaceSheetTable = ({
   const updateSourcePick = (
     raceNumber: number,
     sourceId: string,
-    field: "value1" | "value2" | "value3",
+    field: PickField,
     value: string
   ) => {
     setRows((prev) =>
@@ -132,6 +137,7 @@ const RaceSheetTable = ({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-white">Race Sheet</h2>
+
           <p className="text-sm text-white/60">
             Enter the winners, your picks, and each source&apos;s picks.
           </p>

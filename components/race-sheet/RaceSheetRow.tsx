@@ -1,5 +1,5 @@
 import React from "react";
-import { RaceSheetRowProps} from "@/types";
+import { RaceSheetRowProps } from "@/types";
 import {
   getDoublePickHighlightClass,
   getPickHighlightClass,
@@ -55,6 +55,18 @@ const RaceSheetRow = ({
           value={row.winners.value3}
           onChange={(value) => updateWinner(row.raceNumber, "value3", value)}
           highlightClass={getWinnerHighlightClass(row, row.winners.value3, 2)}
+        />
+      </td>
+
+      <td className="px-2 py-3">
+        <PickInput
+          value={row.winners.value4 ?? ""}
+          onChange={(value) => updateWinner(row.raceNumber, "value4", value)}
+          highlightClass={getWinnerHighlightClass(
+            row,
+            row.winners.value4 ?? "",
+            3
+          )}
         />
       </td>
 
@@ -119,6 +131,18 @@ const RaceSheetRow = ({
         />
       </td>
 
+      <td className="px-2 py-3">
+        <PickInput
+          value={row.userPicks.value4 ?? ""}
+          onChange={(value) => updateUserPick(row.raceNumber, "value4", value)}
+          highlightClass={getUserPickHighlightClass(
+            row,
+            row.userPicks.value4 ?? "",
+            3
+          )}
+        />
+      </td>
+
       {/* Sources */}
       {sources.map((source) => (
         <React.Fragment key={source.id}>
@@ -160,6 +184,20 @@ const RaceSheetRow = ({
                 row.winners,
                 row.sourcePicks[source.id]?.value3 ?? "",
                 2
+              )}
+            />
+          </td>
+
+          <td className="px-2 py-3">
+            <PickInput
+              value={row.sourcePicks[source.id]?.value4 ?? ""}
+              onChange={(value) =>
+                updateSourcePick(row.raceNumber, source.id, "value4", value)
+              }
+              highlightClass={getPickHighlightClass(
+                row.winners,
+                row.sourcePicks[source.id]?.value4 ?? "",
+                3
               )}
             />
           </td>

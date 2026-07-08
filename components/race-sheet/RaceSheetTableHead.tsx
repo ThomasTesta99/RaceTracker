@@ -20,14 +20,14 @@ const RaceSheetTableHead = ({ sources }: RaceSheetTableHeadProps) => {
         </th>
 
         <th
-          colSpan={3}
+          colSpan={4}
           className="px-4 py-3 text-center text-lg font-semibold text-white sm:text-xl"
         >
           Winners
         </th>
 
         <th
-          colSpan={4}
+          colSpan={5}
           className="border-l border-white/20 px-4 py-3 text-center text-lg font-semibold text-white sm:text-xl"
         >
           My Picks
@@ -36,7 +36,7 @@ const RaceSheetTableHead = ({ sources }: RaceSheetTableHeadProps) => {
         {sources.map((source) => (
           <th
             key={source.id}
-            colSpan={3}
+            colSpan={4}
             className="border-l border-white/20 px-4 py-3 text-center text-lg font-semibold text-white sm:text-xl"
           >
             {source.name}
@@ -45,17 +45,22 @@ const RaceSheetTableHead = ({ sources }: RaceSheetTableHeadProps) => {
       </tr>
 
       <tr className="border-b border-white/10 bg-white/5 text-white/70">
+        {/* Winners */}
         <th className="px-3 py-2 text-center font-medium">1st</th>
         <th className="px-3 py-2 text-center font-medium">2nd</th>
         <th className="px-3 py-2 text-center font-medium">3rd</th>
+        <th className="px-3 py-2 text-center font-medium">4th</th>
 
+        {/* My Picks */}
         <th className="border-l border-white/20 px-3 py-2 text-center font-medium">
           1st/2nd
         </th>
         <th className="px-3 py-2 text-center font-medium">1st</th>
         <th className="px-3 py-2 text-center font-medium">2nd</th>
         <th className="px-3 py-2 text-center font-medium">3rd</th>
+        <th className="px-3 py-2 text-center font-medium">4th</th>
 
+        {/* Sources */}
         {sources.map((source) => (
           <React.Fragment key={source.id}>
             <th className="border-l border-white/20 px-3 py-2 text-center font-medium">
@@ -63,6 +68,7 @@ const RaceSheetTableHead = ({ sources }: RaceSheetTableHeadProps) => {
             </th>
             <th className="px-3 py-2 text-center font-medium">2nd</th>
             <th className="px-3 py-2 text-center font-medium">3rd</th>
+            <th className="px-3 py-2 text-center font-medium">4th</th>
           </React.Fragment>
         ))}
       </tr>

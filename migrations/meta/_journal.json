@@ -71,6 +71,20 @@
       "when": 1778441369448,
       "tag": "0009_melodic_anita_blake",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1783530757693,
+      "tag": "0010_spotty_blink",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1783532403713,
+      "tag": "0011_silent_rattler",
+      "breakpoints": true
     }
   ]
 }

@@ -4,7 +4,7 @@ import { db } from "@/database/drizzle";
 import { raceDays, raceDaySources, sources } from "@/database/schema";
 import { NewRaceDay } from "@/types";
 import { randomUUID } from "crypto";
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 
 export const createRaceDay = async ({
   date,
@@ -48,28 +48,64 @@ export const createRaceDay = async ({
   }
 };
 
-export const getRaceDays = async () => {
+export const getRaceDays = async ({
+  page = 1,
+  limit = 10,
+}: {
+  page?: number;
+  limit?: number;
+}) => {
+  const safePage = Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1;
+  const safeLimit = Number.isFinite(limit) && limit >= 1 ? Math.min(Math.floor(limit), 50) : 10;
   try {
-    const raceList = await db.select().from(raceDays).orderBy(desc(raceDays.date));
+    const offset = (safePage - 1) * safeLimit;
 
-    if (raceList.length === 0) {
-      return {
-        success: false,
-        message: "No race days created",
-        raceList: [],
-      };
-    }
+    const raceList = await db
+      .select()
+      .from(raceDays)
+      .orderBy(desc(raceDays.date))
+      .limit(safeLimit)
+      .offset(offset);
+
+    const [countResult] = await db
+      .select({
+        count: sql<number>`count(*)`,
+      })
+      .from(raceDays);
+
+    const total = Number(countResult.count);
+    const totalPages = Math.ceil(total / safeLimit);
 
     return {
       success: true,
       raceList,
+      pagination: {
+        page: safePage,
+        limit: safeLimit,
+        total,
+        totalPages,
+        hasNextPage: safePage < totalPages,
+        hasPreviousPage: safePage > 1,
+      },
     };
   } catch (error) {
     console.error(error);
+
     return {
       success: false,
-      message: error instanceof Error ? error.message : "There was an error getting the race days.",
+      message:
+        error instanceof Error
+          ? error.message
+          : "There was an error getting the race days.",
       raceList: [],
+      pagination: {
+        page: safePage,
+        limit: safeLimit,
+        total: 0,
+        totalPages: 0,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
     };
   }
 };

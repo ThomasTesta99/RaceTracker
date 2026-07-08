@@ -3,10 +3,10 @@
 import { RaceDay, Source } from "@/types";
 import React, { useState } from "react";
 import { CalendarDays, Trash } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import EditRaceSources from "./EditRaceSources";
-import BetMoney from "./BetMoney";
+import EditRaceSources from "../EditRaceSources";
+import BetMoney from "../BetMoney";
 
 type RaceSheetHeaderProps = {
   raceDay: RaceDay;

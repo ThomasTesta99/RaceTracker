@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export const getPickHighlightClass = (
   winners: { value1: string; value2: string; value3: string },
   sourceValue: string,
-  sourceIndex: 0 | 1 | 2
+  sourceIndex: 0 | 1 | 2 | 3
 ) => {
   const normalizedWinners = [
     winners.value1.trim(),
@@ -37,7 +37,7 @@ export const getPickHighlightClass = (
 export const getUserPickHighlightClass = (
   row: RaceRow,
   userValue: string,
-  userIndex: 0 | 1 | 2
+  userIndex: 0 | 1 | 2 | 3
 ) => {
   const winners = [
     row.winners.value1.trim(),
@@ -65,7 +65,7 @@ export const getUserPickHighlightClass = (
 export const getWinnerHighlightClass = (
   row: RaceRow,
   winnerValue: string,
-  winnerIndex: 0 | 1 | 2
+  winnerIndex: 0 | 1 | 2 | 3
 ) => {
   const normalizedWinnerValue = winnerValue.trim();
 
@@ -92,6 +92,33 @@ export const getWinnerHighlightClass = (
   }
 
   if (allPicks.includes(normalizedWinnerValue)) {
+    return "border-yellow-300/40 bg-yellow-400/30";
+  }
+
+  return "border-white/10 bg-black/30";
+};
+
+export const getDoublePickHighlightClass = (
+  winners: { value1: string; value2: string;},
+  doublePickValue: string,
+  doublePickIndex: 0 | 1
+) => {
+  const normalizedWinners = [
+    winners.value1.trim(),
+    winners.value2.trim(),
+  ];
+
+  const normalizedValue = doublePickValue.trim();
+
+  if (!normalizedValue) {
+    return "border-white/10 bg-black/30";
+  }
+
+  if (normalizedWinners[doublePickIndex] === normalizedValue) {
+    return "border-green-400/40 bg-green-500/30";
+  }
+
+  if (normalizedWinners.includes(normalizedValue)) {
     return "border-yellow-300/40 bg-yellow-400/30";
   }
 

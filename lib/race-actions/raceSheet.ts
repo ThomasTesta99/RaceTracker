@@ -17,6 +17,7 @@ const createEmptyRows = (sourcesList: Source[]): RaceRow[] => {
         value1: "",
         value2: "",
         value3: "",
+        value4: "",
       };
     }
 
@@ -27,11 +28,17 @@ const createEmptyRows = (sourcesList: Source[]): RaceRow[] => {
         value1: "",
         value2: "",
         value3: "",
+        value4: "",
+      },
+      doublePick: {
+        value1: "",
+        value2: "",
       },
       userPicks: {
         value1: "",
         value2: "",
         value3: "",
+        value4: "",
       },
       sourcePicks,
     };
@@ -89,6 +96,7 @@ export const getRaceSheetData = async (raceDayId: string) => {
           value1: existingSourcePick?.value1 ?? "",
           value2: existingSourcePick?.value2 ?? "",
           value3: existingSourcePick?.value3 ?? "",
+          value4: existingSourcePick?.value4 ?? "",
         };
       }
 
@@ -96,23 +104,29 @@ export const getRaceSheetData = async (raceDayId: string) => {
         raceId: existingRace.id,
         raceNumber: existingRace.raceNumber ?? row.raceNumber,
         result:
-            existingRace.result === "win" ||
-            existingRace.result === "loss" ||
-            existingRace.result === "scratch"
+          existingRace.result === "win" ||
+          existingRace.result === "loss" ||
+          existingRace.result === "scratch"
             ? existingRace.result
             : "",
         winners: {
           value1: existingRace.win1 ?? "",
           value2: existingRace.win2 ?? "",
           value3: existingRace.win3 ?? "",
+          value4: existingRace.win4 ?? "",
         },
         userPicks: {
           value1: existingRace.userPick1 ?? "",
           value2: existingRace.userPick2 ?? "",
           value3: existingRace.userPick3 ?? "",
+          value4: existingRace.userPick4 ?? "",
+        },
+        doublePick: {
+          value1: existingRace.doublePick1 ?? "",
+          value2: existingRace.doublePick2 ?? "",
         },
         sourcePicks,
-        };
+      };
     });
 
     return {
@@ -149,10 +163,15 @@ export const saveRaceSheet = async ({
           win1: row.winners.value1 || null,
           win2: row.winners.value2 || null,
           win3: row.winners.value3 || null,
+          win4: row.winners.value4 || null,
+
+          doublePick1: row.doublePick.value1 || null,
+          doublePick2: row.doublePick.value2 || null,
 
           userPick1: row.userPicks.value1 || null,
           userPick2: row.userPicks.value2 || null,
           userPick3: row.userPicks.value3 || null,
+          userPick4: row.userPicks.value4 || null,
         })
         .onConflictDoUpdate({
           target: [races.raceDayId, races.raceNumber],
@@ -162,10 +181,15 @@ export const saveRaceSheet = async ({
             win1: row.winners.value1 || null,
             win2: row.winners.value2 || null,
             win3: row.winners.value3 || null,
+            win4: row.winners.value4 || null,
+
+            doublePick1: row.doublePick.value1 || null,
+            doublePick2: row.doublePick.value2 || null,
 
             userPick1: row.userPicks.value1 || null,
             userPick2: row.userPicks.value2 || null,
             userPick3: row.userPicks.value3 || null,
+            userPick4: row.userPicks.value4 || null,
           },
         })
         .returning({
@@ -182,6 +206,7 @@ export const saveRaceSheet = async ({
             value1: picks.value1 || null,
             value2: picks.value2 || null,
             value3: picks.value3 || null,
+            value4: picks.value4 || null,
           })
           .onConflictDoUpdate({
             target: [racePicks.raceId, racePicks.sourceId],
@@ -189,6 +214,7 @@ export const saveRaceSheet = async ({
               value1: picks.value1 || null,
               value2: picks.value2 || null,
               value3: picks.value3 || null,
+              value4: picks.value4 || null,
             },
           });
       }

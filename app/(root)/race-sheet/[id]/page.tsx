@@ -1,5 +1,5 @@
-import RaceSheetHeader from "@/components/RaceSheetHeader";
-import RaceSheetTable from "@/components/RaceSheetTable";
+import RaceSheetHeader from "@/components/race-sheet/RaceSheetHeader";
+import RaceSheetTable from "@/components/race-sheet/RaceSheetTable";
 import {
   getRaceDay,
   getRaceDaySourceOptions,

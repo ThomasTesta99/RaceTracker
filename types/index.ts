@@ -1,4 +1,12 @@
-import { leaguePool, leaguePoolEntries, raceDays, raceDaySources, racePicks, races, sources } from "@/database/schema";
+import {
+  leaguePool,
+  leaguePoolEntries,
+  raceDays,
+  raceDaySources,
+  racePicks,
+  races,
+  sources,
+} from "@/database/schema";
 import { ReactNode } from "react";
 
 export type RaceResult = "win" | "loss" | "scratch";
@@ -24,7 +32,6 @@ export type NewLeaguePool = typeof leaguePool.$inferInsert;
 export type LeaguePoolEntry = typeof leaguePoolEntries.$inferSelect;
 export type NewLeaguePoolEntry = typeof leaguePoolEntries.$inferInsert;
 
-
 export type GetRaceDayResponse =
   | {
       success: true;
@@ -39,11 +46,27 @@ export type GetRaceDaysResponse =
   | {
       success: true;
       raceList: RaceDay[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
     }
   | {
       success: false;
       message: string;
-      raceList?: RaceDay[];
+      raceList: RaceDay[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
     };
 
 export type GetSourcesResponse =
@@ -59,19 +82,28 @@ export type GetSourcesResponse =
 
 export type RaceResultOption = "win" | "loss" | "scratch" | "";
 
-export type PickTriple = {
+export type PickField = "value1" | "value2" | "value3" | "value4";
+
+export type PickValues = {
   value1: string;
   value2: string;
   value3: string;
+  value4: string;
+};
+
+export type DoublePickValues = {
+  value1: string;
+  value2: string;
 };
 
 export type RaceRow = {
   raceId?: string;
   raceNumber: number;
   result: RaceResultOption;
-  winners: PickTriple;
-  userPicks: PickTriple;
-  sourcePicks: Record<string, PickTriple>;
+  winners: PickValues;
+  userPicks: PickValues;
+  sourcePicks: Record<string, PickValues>;
+  doublePick: DoublePickValues;
 };
 
 export type RaceSheetTableProps = {
@@ -140,4 +172,56 @@ export type CreateLeaguePoolEntryProps = {
 export type CreateLeaguePoolEntryFormProps = {
   leaguePoolId: string;
   onSuccess?: () => void;
+};
+
+export type RaceSheetTableHeadProps = {
+  sources: Source[];
+};
+
+export type PickInputProps = {
+  value: string;
+  onChange: (value: string) => void;
+  highlightClass: string;
+};
+
+export type DoublePickInputProps = {
+  value1: string;
+  value2: string;
+  onChangeValue1: (value: string) => void;
+  onChangeValue2: (value: string) => void;
+  highlightClass1: string;
+  highlightClass2: string;
+};
+
+export type ResultCellProps = {
+  value: RaceResultOption;
+  onChange: (value: RaceResultOption) => void;
+  onClear: () => void;
+};
+
+export type RaceSheetRowProps = {
+  row: RaceRow;
+  sources: Source[];
+  updateResult: (raceNumber: number, value: RaceResultOption) => void;
+  updateWinner: (
+    raceNumber: number,
+    field: PickField,
+    value: string
+  ) => void;
+  updateDoublePick: (
+    raceNumber: number,
+    field: keyof DoublePickValues,
+    value: string
+  ) => void;
+  updateUserPick: (
+    raceNumber: number,
+    field: PickField,
+    value: string
+  ) => void;
+  updateSourcePick: (
+    raceNumber: number,
+    sourceId: string,
+    field: PickField,
+    value: string
+  ) => void;
 };

@@ -5,7 +5,7 @@ const PickInput = ({ value, onChange, highlightClass }: PickInputProps) => {
     <input
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${highlightClass}`}
+      className={`w-14 rounded-lg border px-2 py-2 text-center text-white sm:w-16 ${highlightClass}`}
     />
   );
 };

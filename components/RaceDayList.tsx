@@ -16,37 +16,45 @@ const RaceDayList = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const fetchRaceDays = async () => {
-      try {
-        setLoading(true);
-        setMessage("");
+     useEffect(() => {
+    const controller = new AbortController();
 
-        const res = await fetch(
-          `/api/race-days?page=${page}&limit=${RACE_DAYS_PER_PAGE}`
-        );
+     const fetchRaceDays = async () => {
+       try {
+         setLoading(true);
+         setMessage("");
 
-        const result: GetRaceDaysResponse = await res.json();
+         const res = await fetch(
+          `/api/race-days?page=${page}&limit=${RACE_DAYS_PER_PAGE}`,
+          { signal: controller.signal }
+         );
 
-        if (result.success) {
-          setRaceDayList(result.raceList ?? []);
-          setPagination(result.pagination);
-        } else {
-          setRaceDayList([]);
-          setPagination(result.pagination);
-          setMessage(result.message ?? "Something went wrong.");
+         const result: GetRaceDaysResponse = await res.json();
+
+         if (result.success) {
+           setRaceDayList(result.raceList ?? []);
+           setPagination(result.pagination);
+         } else {
+           setRaceDayList([]);
+           setPagination(result.pagination);
+           setMessage(result.message ?? "Something went wrong.");
+         }
+       } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+         console.error(error);
+         setRaceDayList([]);
+         setMessage("Failed to load race days.");
+       } finally {
+        if (!controller.signal.aborted) {
+           setLoading(false);
         }
-      } catch (error) {
-        console.error(error);
-        setRaceDayList([]);
-        setMessage("Failed to load race days.");
-      } finally {
-        setLoading(false);
-      }
-    };
+       }
+     };
 
-    fetchRaceDays();
-  }, [page]);
+     fetchRaceDays();
+
+    return () => controller.abort();
+   }, [page]);
 
   return (
     <section className="min-h-screen px-4 py-8 text-white sm:px-6 sm:py-10">

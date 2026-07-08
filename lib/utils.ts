@@ -99,14 +99,13 @@ export const getWinnerHighlightClass = (
 };
 
 export const getDoublePickHighlightClass = (
-  winners: { value1: string; value2: string; value3: string },
+  winners: { value1: string; value2: string;},
   doublePickValue: string,
   doublePickIndex: 0 | 1
 ) => {
   const normalizedWinners = [
     winners.value1.trim(),
     winners.value2.trim(),
-    winners.value3.trim(),
   ];
 
   const normalizedValue = doublePickValue.trim();

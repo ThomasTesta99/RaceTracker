@@ -55,9 +55,9 @@ export const getRaceDays = async ({
   page?: number;
   limit?: number;
 }) => {
+  const safePage = Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1;
+  const safeLimit = Number.isFinite(limit) && limit >= 1 ? Math.min(Math.floor(limit), 50) : 10;
   try {
-    const safePage = Math.max(page, 1);
-    const safeLimit = Math.min(Math.max(limit, 1), 50);
     const offset = (safePage - 1) * safeLimit;
 
     const raceList = await db
@@ -99,8 +99,8 @@ export const getRaceDays = async ({
           : "There was an error getting the race days.",
       raceList: [],
       pagination: {
-        page,
-        limit,
+        page: safePage,
+        limit: safeLimit,
         total: 0,
         totalPages: 0,
         hasNextPage: false,

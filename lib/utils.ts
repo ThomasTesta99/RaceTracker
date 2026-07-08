@@ -97,3 +97,31 @@ export const getWinnerHighlightClass = (
 
   return "border-white/10 bg-black/30";
 };
+
+export const getDoublePickHighlightClass = (
+  winners: { value1: string; value2: string; value3: string },
+  doublePickValue: string,
+  doublePickIndex: 0 | 1
+) => {
+  const normalizedWinners = [
+    winners.value1.trim(),
+    winners.value2.trim(),
+    winners.value3.trim(),
+  ];
+
+  const normalizedValue = doublePickValue.trim();
+
+  if (!normalizedValue) {
+    return "border-white/10 bg-black/30";
+  }
+
+  if (normalizedWinners[doublePickIndex] === normalizedValue) {
+    return "border-green-400/40 bg-green-500/30";
+  }
+
+  if (normalizedWinners.includes(normalizedValue)) {
+    return "border-yellow-300/40 bg-yellow-400/30";
+  }
+
+  return "border-white/10 bg-black/30";
+};

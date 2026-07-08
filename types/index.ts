@@ -72,6 +72,10 @@ export type RaceRow = {
   winners: PickTriple;
   userPicks: PickTriple;
   sourcePicks: Record<string, PickTriple>;
+  doublePick: {
+    value1: string;
+    value2: string;
+  };
 };
 
 export type RaceSheetTableProps = {

@@ -2,7 +2,7 @@
 
 import { db } from "@/database/drizzle";
 import { racePicks, races, sources } from "@/database/schema";
-import { and, count, eq, isNotNull, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export const getMetrics = async () => {
   try {

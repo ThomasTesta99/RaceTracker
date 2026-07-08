@@ -10,7 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { getPickHighlightClass, getUserPickHighlightClass, getWinnerHighlightClass } from "@/lib/utils";
+import {
+  getDoublePickHighlightClass,
+  getPickHighlightClass,
+  getUserPickHighlightClass,
+  getWinnerHighlightClass,
+} from "@/lib/utils";
 
 const RaceSheetTable = ({
   raceDayId,
@@ -45,6 +50,26 @@ const RaceSheetTable = ({
               ...row,
               winners: {
                 ...row.winners,
+                [field]: value,
+              },
+            }
+          : row
+      )
+    );
+  };
+
+  const updateDoublePick = (
+    raceNumber: number,
+    field: "value1" | "value2",
+    value: string
+  ) => {
+    setRows((prev) =>
+      prev.map((row) =>
+        row.raceNumber === raceNumber
+          ? {
+              ...row,
+              doublePick: {
+                ...row.doublePick,
                 [field]: value,
               },
             }
@@ -124,6 +149,7 @@ const RaceSheetTable = ({
         </div>
 
         <button
+          type="button"
           onClick={handleSave}
           disabled={isPending}
           className="cursor-pointer rounded-xl bg-white px-4 py-2 font-medium text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
@@ -148,28 +174,28 @@ const RaceSheetTable = ({
             <tr className="border-b border-white/10 bg-white/10">
               <th
                 rowSpan={2}
-                className="min-w-[120px] px-4 py-3 text-center text-lg sm:text-xl font-semibold"
+                className="min-w-[120px] px-4 py-3 text-center text-lg font-semibold sm:text-xl"
               >
                 Result
               </th>
 
               <th
                 rowSpan={2}
-                className="min-w-[90px] px-4 py-3 text-center text-lg sm:text-xl font-semibold"
+                className="min-w-[90px] px-4 py-3 text-center text-lg font-semibold sm:text-xl"
               >
                 Race #
               </th>
 
               <th
                 colSpan={3}
-                className="px-4 py-3 text-center text-lg sm:text-xl font-semibold text-white"
+                className="px-4 py-3 text-center text-lg font-semibold text-white sm:text-xl"
               >
                 Winners
               </th>
 
               <th
-                colSpan={3}
-                className="border-l border-white/20 px-4 py-3 text-center text-lg sm:text-xl font-semibold text-white"
+                colSpan={4}
+                className="border-l border-white/20 px-4 py-3 text-center text-lg font-semibold text-white sm:text-xl"
               >
                 My Picks
               </th>
@@ -178,7 +204,7 @@ const RaceSheetTable = ({
                 <th
                   key={source.id}
                   colSpan={3}
-                  className="border-l border-white/20 px-4 py-3 text-center text-lg sm:text-xl font-semibold text-white"
+                  className="border-l border-white/20 px-4 py-3 text-center text-lg font-semibold text-white sm:text-xl"
                 >
                   {source.name}
                 </th>
@@ -191,8 +217,9 @@ const RaceSheetTable = ({
               <th className="px-3 py-2 text-center font-medium">3rd</th>
 
               <th className="border-l border-white/20 px-3 py-2 text-center font-medium">
-                1st
+                Exacta
               </th>
+              <th className="px-3 py-2 text-center font-medium">1st</th>
               <th className="px-3 py-2 text-center font-medium">2nd</th>
               <th className="px-3 py-2 text-center font-medium">3rd</th>
 
@@ -260,7 +287,7 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateWinner(row.raceNumber, "value1", e.target.value)
                     }
-                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getWinnerHighlightClass(
+                    className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getWinnerHighlightClass(
                       row,
                       row.winners.value1,
                       0
@@ -274,7 +301,7 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateWinner(row.raceNumber, "value2", e.target.value)
                     }
-                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getWinnerHighlightClass(
+                    className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getWinnerHighlightClass(
                       row,
                       row.winners.value2,
                       1
@@ -288,7 +315,7 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateWinner(row.raceNumber, "value3", e.target.value)
                     }
-                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getWinnerHighlightClass(
+                    className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getWinnerHighlightClass(
                       row,
                       row.winners.value3,
                       2
@@ -296,14 +323,51 @@ const RaceSheetTable = ({
                   />
                 </td>
 
-                {/* My Picks */}
+                {/* My Picks - Double Entry / Exacta */}
                 <td className="border-l border-white/20 px-2 py-3">
+                  <div className="flex w-28 overflow-hidden rounded-lg border border-white/10 bg-black/30 sm:w-32">
+                    <input
+                      value={row.doublePick?.value1 ?? ""}
+                      onChange={(e) =>
+                        updateDoublePick(
+                          row.raceNumber,
+                          "value1",
+                          e.target.value
+                        )
+                      }
+                      className={`w-1/2 border-0 border-r border-white/10 px-2 py-2 text-center text-white outline-none ${getDoublePickHighlightClass(
+                        row.winners,
+                        row.doublePick?.value1 ?? "",
+                        0
+                      )}`}
+                    />
+
+                    <input
+                      value={row.doublePick?.value2 ?? ""}
+                      onChange={(e) =>
+                        updateDoublePick(
+                          row.raceNumber,
+                          "value2",
+                          e.target.value
+                        )
+                      }
+                      className={`w-1/2 border-0 px-2 py-2 text-center text-white outline-none ${getDoublePickHighlightClass(
+                        row.winners,
+                        row.doublePick?.value2 ?? "",
+                        1
+                      )}`}
+                    />
+                  </div>
+                </td>
+
+                {/* My Picks - Normal Picks */}
+                <td className="px-2 py-3">
                   <input
                     value={row.userPicks.value1}
                     onChange={(e) =>
                       updateUserPick(row.raceNumber, "value1", e.target.value)
                     }
-                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getUserPickHighlightClass(
+                    className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getUserPickHighlightClass(
                       row,
                       row.userPicks.value1,
                       0
@@ -317,7 +381,7 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateUserPick(row.raceNumber, "value2", e.target.value)
                     }
-                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getUserPickHighlightClass(
+                    className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getUserPickHighlightClass(
                       row,
                       row.userPicks.value2,
                       1
@@ -331,7 +395,7 @@ const RaceSheetTable = ({
                     onChange={(e) =>
                       updateUserPick(row.raceNumber, "value3", e.target.value)
                     }
-                    className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getUserPickHighlightClass(
+                    className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getUserPickHighlightClass(
                       row,
                       row.userPicks.value3,
                       2
@@ -353,7 +417,7 @@ const RaceSheetTable = ({
                             e.target.value
                           )
                         }
-                        className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getPickHighlightClass(
+                        className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getPickHighlightClass(
                           row.winners,
                           row.sourcePicks[source.id]?.value1 ?? "",
                           0
@@ -372,7 +436,7 @@ const RaceSheetTable = ({
                             e.target.value
                           )
                         }
-                        className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getPickHighlightClass(
+                        className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getPickHighlightClass(
                           row.winners,
                           row.sourcePicks[source.id]?.value2 ?? "",
                           1
@@ -391,7 +455,7 @@ const RaceSheetTable = ({
                             e.target.value
                           )
                         }
-                        className={`w-14 sm:w-16 rounded-lg border px-2 py-2 text-center text-white outline-none ${getPickHighlightClass(
+                        className={`w-14 rounded-lg border px-2 py-2 text-center text-white outline-none sm:w-16 ${getPickHighlightClass(
                           row.winners,
                           row.sourcePicks[source.id]?.value3 ?? "",
                           2

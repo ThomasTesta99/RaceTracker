@@ -39,6 +39,9 @@ export const races = pgTable("races", {
     userPick1: text("user_pick_1"),
     userPick2: text("user_pick_2"),
     userPick3: text("user_pick_3"),
+
+    doublePick1: text("double_pick_1"),
+    doublePick2: text("double_pick_2"),
 },
   (table) => [
     index("races_race_day_id_idx").on(table.raceDayId),

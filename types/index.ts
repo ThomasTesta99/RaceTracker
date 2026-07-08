@@ -145,3 +145,55 @@ export type CreateLeaguePoolEntryFormProps = {
   leaguePoolId: string;
   onSuccess?: () => void;
 };
+
+export type RaceSheetTableHeadProps = {
+  sources: Source[];
+};
+
+export type PickInputProps = {
+  value: string;
+  onChange: (value: string) => void;
+  highlightClass: string;
+};
+
+export type DoublePickInputProps = {
+  value1: string;
+  value2: string;
+  onChangeValue1: (value: string) => void;
+  onChangeValue2: (value: string) => void;
+  highlightClass1: string;
+  highlightClass2: string;
+};
+
+export type ResultCellProps = {
+  value: RaceResultOption;
+  onChange: (value: RaceResultOption) => void;
+  onClear: () => void;
+};
+
+export type RaceSheetRowProps = {
+  row: RaceRow;
+  sources: Source[];
+  updateResult: (raceNumber: number, value: RaceResultOption) => void;
+  updateWinner: (
+    raceNumber: number,
+    field: "value1" | "value2" | "value3",
+    value: string
+  ) => void;
+  updateDoublePick: (
+    raceNumber: number,
+    field: "value1" | "value2",
+    value: string
+  ) => void;
+  updateUserPick: (
+    raceNumber: number,
+    field: "value1" | "value2" | "value3",
+    value: string
+  ) => void;
+  updateSourcePick: (
+    raceNumber: number,
+    sourceId: string,
+    field: "value1" | "value2" | "value3",
+    value: string
+  ) => void;
+};

@@ -39,11 +39,27 @@ export type GetRaceDaysResponse =
   | {
       success: true;
       raceList: RaceDay[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
     }
   | {
       success: false;
       message: string;
-      raceList?: RaceDay[];
+      raceList: RaceDay[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
     };
 
 export type GetSourcesResponse =

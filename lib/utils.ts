@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getPickHighlightClass = (
-  winners: { value1: string; value2: string; value3: string },
+  winners: { value1: string; value2: string; value3: string; value4: string },
   sourceValue: string,
   sourceIndex: 0 | 1 | 2 | 3
 ) => {
@@ -15,6 +15,7 @@ export const getPickHighlightClass = (
     winners.value1.trim(),
     winners.value2.trim(),
     winners.value3.trim(),
+    winners.value4.trim(), 
   ];
 
   const normalizedSourceValue = sourceValue.trim();
@@ -43,6 +44,7 @@ export const getUserPickHighlightClass = (
     row.winners.value1.trim(),
     row.winners.value2.trim(),
     row.winners.value3.trim(),
+    row.winners.value4.trim(),
   ];
 
   const normalizedUserValue = userValue.trim();
@@ -77,12 +79,14 @@ export const getWinnerHighlightClass = (
     row.userPicks.value1.trim(),
     row.userPicks.value2.trim(),
     row.userPicks.value3.trim(),
+    row.userPicks.value4.trim(),
   ];
 
   const sourcePicks = Object.values(row.sourcePicks).flatMap((sourcePick) => [
     sourcePick.value1.trim(),
     sourcePick.value2.trim(),
     sourcePick.value3.trim(),
+    sourcePick.value4.trim(),
   ]);
 
   const allPicks = [...userPicks, ...sourcePicks];

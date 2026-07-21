@@ -82,20 +82,33 @@ export const getWinnerHighlightClass = (
     row.userPicks.value4.trim(),
   ];
 
-  const sourcePicks = Object.values(row.sourcePicks).flatMap((sourcePick) => [
+  const sourcePickGroups = Object.values(row.sourcePicks).map((sourcePick) => [
     sourcePick.value1.trim(),
     sourcePick.value2.trim(),
     sourcePick.value3.trim(),
     sourcePick.value4.trim(),
   ]);
 
-  const allPicks = [...userPicks, ...sourcePicks];
 
-  if (allPicks[winnerIndex] === normalizedWinnerValue) {
+  const correctPositionMatch =
+    userPicks[winnerIndex] === normalizedWinnerValue ||
+    sourcePickGroups.some(
+      (sourcePicks) =>
+        sourcePicks[winnerIndex] === normalizedWinnerValue
+    );
+
+  if (correctPositionMatch) {
     return "border-green-400/40 bg-green-500/30";
   }
 
-  if (allPicks.includes(normalizedWinnerValue)) {
+
+  const pickedAnywhere =
+    userPicks.includes(normalizedWinnerValue) ||
+    sourcePickGroups.some((sourcePicks) =>
+      sourcePicks.includes(normalizedWinnerValue)
+    );
+
+  if (pickedAnywhere) {
     return "border-yellow-300/40 bg-yellow-400/30";
   }
 

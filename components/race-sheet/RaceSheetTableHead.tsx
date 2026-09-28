@@ -23,7 +23,7 @@ const RaceSheetTableHead = ({ sources }: RaceSheetTableHeadProps) => {
           colSpan={4}
           className="px-4 py-3 text-center text-lg font-semibold text-white sm:text-xl"
         >
-          Winners
+          Results
         </th>
 
         <th

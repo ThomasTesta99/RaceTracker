@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Eye, EyeOff, FlagTriangleRight, Loader2, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import { Label } from "./ui/label";
+import { signInUser } from "@/lib/auth-actions/auth-actions";
 
 const AuthForm = () => {
   const router = useRouter();
@@ -16,27 +17,27 @@ const AuthForm = () => {
   const [error, setError] = useState("");
 
   const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {
-    // e.preventDefault();
-    // if (isLoading) return;
+    e.preventDefault();
+    if (isLoading) return;
 
-    // setIsLoading(true);
-    // setError("");
+    setIsLoading(true);
+    setError("");
 
-    // try {
-    //   const { error } = await authClient.signIn.email({ email: email.trim(), password });
+    try {
+      const result = await signInUser({ email, password });
 
-    //   if (error) {
-    //     setError(error.status === 429 ? "Too many attempts. Please try again later." : "Invalid email or password.");
-    //     return;
-    //   }
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
 
-    //   router.replace("/");
-    //   router.refresh();
-    // } catch {
-    //   setError("Unable to sign in. Please try again.");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      router.replace("/");
+      router.refresh();
+    } catch {
+      setError("Unable to sign in. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

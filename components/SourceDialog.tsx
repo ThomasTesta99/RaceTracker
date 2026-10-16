@@ -10,7 +10,7 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Pencil, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Source } from "@/types";
 
 type CreateSourceProps = {

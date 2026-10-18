@@ -3,6 +3,7 @@
 import { db } from "@/database/drizzle";
 import { racePicks, races, sources } from "@/database/schema";
 import { AnyColumn, eq, sql } from "drizzle-orm";
+import { getUserSession } from "../auth-actions/auth-helpers";
 
 const isNotEmpty = (column: AnyColumn) => sql`
   nullif(trim(${column}), '') is not null
@@ -129,6 +130,13 @@ const userItmTotalNumbers = sql<number>`
 
 export const getMetrics = async () => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const sourceStats = await db
       .select({
         sourceId: sources.id,

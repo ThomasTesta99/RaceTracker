@@ -4,9 +4,10 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Eye, EyeOff, FlagTriangleRight, Loader2, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Loader2, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import { Label } from "./ui/label";
 import { signInUser } from "@/lib/auth-actions/auth-actions";
+import Image from "next/image";
 
 const AuthForm = () => {
   const router = useRouter();
@@ -43,12 +44,21 @@ const AuthForm = () => {
   return (
     <div className="w-full max-w-[420px] text-white">
       <div className="mb-8 flex flex-col items-center gap-3">
-        <div className="flex size-14 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-500/10">
-          <FlagTriangleRight className="size-7 text-blue-400" />
+        <div className="flex w-full items-center justify-center mb-4">
+          <Image
+            src="/assets/Horse.png"
+            alt="RaceTracker horse"
+            width={500}
+            height={300}
+            priority
+            className=" object-contain drop-shadow-2xl"
+          />
         </div>
+      
 
-        <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight">TMT&apos;S RACETRACKER</h1>
+
+        <div className="text-center w-full ">
+          <h1 className="text-4xl font-bold tracking-tight">TMT&apos;S RACETRACKER</h1>
         </div>
       </div>
 

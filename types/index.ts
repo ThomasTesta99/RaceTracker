@@ -7,6 +7,7 @@ import {
   races,
   sources,
 } from "@/database/schema";
+import { auth } from "@/lib/auth";
 import { ReactNode } from "react";
 
 export type RaceResult = "win" | "loss" | "scratch";
@@ -225,3 +226,12 @@ export type RaceSheetRowProps = {
     value: string
   ) => void;
 };
+
+export type AuthSession = typeof auth.$Infer.Session;
+
+export type User = AuthSession["user"];
+export type Session = AuthSession["session"];
+
+export interface UserProps {
+  user?: User;
+}

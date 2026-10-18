@@ -5,6 +5,7 @@ import { raceDays, raceDaySources, sources } from "@/database/schema";
 import { NewRaceDay } from "@/types";
 import { randomUUID } from "crypto";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { getUserSession } from "../auth-actions/auth-helpers";
 
 export const createRaceDay = async ({
   date,
@@ -16,6 +17,14 @@ export const createRaceDay = async ({
   sourceIds: string[];
 }) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
+
     const newRaceDayId = randomUUID();
     const newRaceDay: NewRaceDay = {
       id: newRaceDayId,
@@ -58,6 +67,14 @@ export const getRaceDays = async ({
   const safePage = Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1;
   const safeLimit = Number.isFinite(limit) && limit >= 1 ? Math.min(Math.floor(limit), 50) : 10;
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
+
     const offset = (safePage - 1) * safeLimit;
 
     const raceList = await db
@@ -112,6 +129,14 @@ export const getRaceDays = async ({
 
 export const getRaceDay = async ({ id }: { id: string }) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
+
     const [raceDay] = await db
       .select()
       .from(raceDays)
@@ -140,6 +165,14 @@ export const getRaceDay = async ({ id }: { id: string }) => {
 
 export const deleteRaceDay = async ({ id }: { id: string }) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
+
     await db.delete(raceDays).where(eq(raceDays.id, id)).returning();
 
     return {
@@ -162,6 +195,13 @@ export const updateRaceDaySources = async ({
   sourceIds: string[];
 }) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     if (sourceIds.length === 0) {
       return {
         success: false,
@@ -217,6 +257,13 @@ export const updateRaceDaySources = async ({
 
 export const getRaceDaySourceOptions = async (raceDayId: string) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const allSources = await db
       .select()
       .from(sources)
@@ -254,6 +301,13 @@ export const updateBetMoney = async ({
   betMoney: number;
 }) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     if (Number.isNaN(betMoney) || betMoney < 0) {
       return {
         success: false,

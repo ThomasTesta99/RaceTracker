@@ -5,9 +5,17 @@ import { sources } from "@/database/schema";
 import { NewSource, Source } from "@/types"
 import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
+import { getUserSession } from "../auth-actions/auth-helpers";
 
 export const createSource = async (sourceName: string) => {
     try {
+        const session = await getUserSession();
+        if(!session){
+            return {
+            success: false, 
+            message: "Unauthorized",
+            }
+        }
         const newSource: NewSource = {
             id: randomUUID(), 
             name: sourceName, 
@@ -32,6 +40,13 @@ export const createSource = async (sourceName: string) => {
 
 export const getSources = async () => {
     try {
+        const session = await getUserSession();
+        if(!session){
+        return {
+            success: false, 
+            message: "Unauthorized",
+        }
+        }
         const sourcesList: Source[] = await db
             .select()
             .from(sources);
@@ -51,6 +66,13 @@ export const getSources = async () => {
 
 export const editSource = async ({id, sourceName}: {id: string, sourceName: string}) => {
     try {
+        const session = await getUserSession();
+        if(!session){
+        return {
+            success: false, 
+            message: "Unauthorized",
+        }
+        }
         const [exists] = await db.select().from(sources).where(eq(sources.id, id));
 
         if(!exists){
@@ -84,6 +106,13 @@ export const editSource = async ({id, sourceName}: {id: string, sourceName: stri
 
 export const deleteSource = async (id: string) => {
     try {
+        const session = await getUserSession();
+        if(!session){
+        return {
+            success: false, 
+            message: "Unauthorized",
+        }
+        }
         await db.delete(sources).where(eq(sources.id, id));
 
         return {

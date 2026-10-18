@@ -39,7 +39,7 @@ export const auth = betterAuth({
                     user_name: user.name ?? "there", 
                     action_url: verificationUrl.toString(), 
                     type_header: "Verify your email",
-                    type_body: "verfiy your email"
+                    type_body: "verify your email"
                 }
             })
         }

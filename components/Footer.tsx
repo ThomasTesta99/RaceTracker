@@ -22,9 +22,9 @@ const Footer = ({ user, open }: FooterProps) => {
       )}
     >
       <Link
-        href="/profile"
-        aria-label="View your profile"
-        title="View your profile"
+        href="/settings"
+        aria-label="View your settings"
+        title="View your settings"
         className={cn(
           "flex min-w-0 items-center rounded-xl transition hover:bg-white/5",
           open ? "flex-1 gap-3 px-2 py-2" : "justify-center p-1"

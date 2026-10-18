@@ -200,3 +200,32 @@ export const changeUserPassword = async ({currentPassword, newPassword, confirmP
     return handleActionError(error, "changeUserPassword");
   }
 };
+
+export const sendUserVerificationEmail = async () => {
+  try {
+    const session = await getUserSession();
+    if (!session?.user) return getPublicError("UNAUTHORIZED");
+
+    if (session.user.emailVerified) {
+      return {
+        success: true as const,
+        message: "Your email address is already verified.",
+      };
+    }
+
+    await auth.api.sendVerificationEmail({
+      body: {
+        email: session.user.email,
+        callbackURL: "/email-verified",
+      },
+      headers: await headers(),
+    });
+
+    return {
+      success: true as const,
+      message: "A verification link has been sent to your email address. Check your inbox.",
+    };
+  } catch (error) {
+    return handleActionError(error, "sendUserVerificationEmail");
+  }
+};

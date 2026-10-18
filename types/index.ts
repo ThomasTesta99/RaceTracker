@@ -235,3 +235,17 @@ export type Session = AuthSession["session"];
 export interface UserProps {
   user?: User;
 }
+
+export type ActionErrorCode =
+  | "UNAUTHORIZED"
+  | "NOT_FOUND"
+  | "VALIDATION_ERROR"
+  | "DATABASE_ERROR"
+  | "RATE_LIMITED"
+  | "SERVICE_UNAVAILABLE"
+  | "INTERNAL_ERROR"
+  | "LAST_SIGN_IN_METHOD"
+  | "INVALID_PASSWORD"
+  | "REAUTH_REQUIRED"
+  | "ACCOUNT_DELETION_BLOCKED"
+  | "INVALID_CREDENTIALS";

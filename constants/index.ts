@@ -28,4 +28,6 @@ export const sidebarLinks = [
         route: '/league-pools', 
         label: 'League Pool',
     }
-]
+];
+
+export const MIN_PASSWORD_LENGTH = 10;

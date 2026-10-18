@@ -85,6 +85,13 @@
       "when": 1783532403713,
       "tag": "0011_silent_rattler",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792188814942,
+      "tag": "0012_steady_terror",
+      "breakpoints": true
     }
   ]
 }

@@ -9,6 +9,8 @@ import {
   doublePrecision,
 } from "drizzle-orm/pg-core";
 
+export * from "./auth-schema";
+
 export const betTypeEnum = pgEnum("bet_type", ["box", "exact"]);
 
 export const raceDays = pgTable("race_days",{

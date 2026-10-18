@@ -1,8 +1,10 @@
 "use client";
 
+import { useLogout } from "@/app/hooks/useLogout";
 import { sidebarLinks } from "@/constants";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
@@ -10,6 +12,13 @@ import React, { useState } from "react";
 const MobileTopbar = () => {
   const [open, setOpen] = useState(false);
   const pathName = usePathname();
+
+  const {
+    signOut, 
+    isLoggingOut, 
+  } = useLogout(() => 
+    setOpen(false), 
+  )
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/40 backdrop-blur-xl md:hidden">
@@ -65,6 +74,34 @@ const MobileTopbar = () => {
               </Link>
             );
           })}
+          <button
+              type="button"
+              onClick={signOut}
+              disabled={isLoggingOut}
+              className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label={
+                isLoggingOut
+                  ? "Signing out"
+                  : "Log out"
+              }
+              title={
+                isLoggingOut
+                  ? "Signing out"
+                  : "Log out"
+              }
+            >
+              <div className="flex flex-row gap-4 justify-end">
+                <p>Logout</p>
+                <Image
+                  src="/assets/logout.svg"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="brightness-0 invert"
+                />
+                
+              </div>
+            </button>
         </nav>
       )}
     </header>

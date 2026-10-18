@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Rajdhani, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "react-hot-toast";
+
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -32,6 +34,7 @@ export default function RootLayout({
       className={cn("h-full", inter.variable, rajdhani.variable, "font-sans", geist.variable)}
     >
       <body className="min-h-screen flex flex-col font-sans text-white">
+        <Toaster />
         {children}
       </body>
     </html>

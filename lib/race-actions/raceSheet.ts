@@ -5,6 +5,7 @@ import { randomUUID } from "crypto";
 import { RaceRow, Source } from "@/types";
 import { db } from "@/database/drizzle";
 import { raceDaySources, racePicks, races, sources } from "@/database/schema";
+import { getUserSession } from "../auth-actions/auth-helpers";
 
 const TOTAL_RACES = 15;
 
@@ -47,6 +48,13 @@ const createEmptyRows = (sourcesList: Source[]): RaceRow[] => {
 
 export const getRaceSheetData = async (raceDayId: string) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const sourcesList = await db
       .select({
         id: sources.id,
@@ -151,6 +159,13 @@ export const saveRaceSheet = async ({
   rows: RaceRow[];
 }) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     for (const row of rows) {
       const [savedRace] = await db
         .insert(races)

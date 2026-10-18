@@ -1,7 +1,7 @@
 "use client";
 
 import { GetSourcesResponse, Source } from "@/types";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateSource from "./SourceDialog";
 import { Button } from "./ui/button";
 import { Pencil } from "lucide-react";
@@ -13,32 +13,46 @@ const RaceSources = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  const fetchSources = useCallback(async () => {
-    try {
-      setLoading(true);
-      setMessage("");
-
-      const res = await fetch("/api/sources");
-      const result: GetSourcesResponse = await res.json();
-
-      if (result.success) {
-        setSourcesList(result.sourcesList);
-      } else {
-        setSourcesList([]);
-        setMessage(result.message || "Failed to load sources");
-      }
-    } catch (error) {
-      console.error(error);
-      setSourcesList([]);
-      setMessage("Failed to load sources");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    fetchSources();
-  }, [fetchSources]);
+    const controller = new AbortController();
+
+    fetch("/api/sources", { signal: controller.signal })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Failed to load sources");
+        return (await res.json()) as GetSourcesResponse;
+      })
+      .then((result) => {
+        if (controller.signal.aborted) return;
+
+        if (result.success) {
+          setSourcesList(result.sourcesList);
+          setMessage("");
+        } else {
+          setSourcesList([]);
+          setMessage(result.message || "Failed to load sources");
+        }
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        console.error(error);
+        setSourcesList([]);
+        setMessage("Failed to load sources");
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+
+    return () => controller.abort();
+  }, [refreshKey]);
+
+  const refreshSources = () => {
+    setLoading(true);
+    setMessage("");
+    setRefreshKey((previous) => previous + 1);
+  };
 
   if (loading) {
     return (
@@ -63,7 +77,7 @@ const RaceSources = () => {
           </div>
 
           <div className="w-full md:w-[240px]">
-            <CreateSource onSourceSaved={fetchSources} />
+            <CreateSource onSourceSaved={refreshSources} />
           </div>
         </div>
 
@@ -97,7 +111,7 @@ const RaceSources = () => {
                   <div className="flex w-full flex-wrap gap-3 sm:w-auto sm:flex-row sm:justify-end">
                     <SourceDialog
                       source={source}
-                      onSourceSaved={fetchSources}
+                      onSourceSaved={refreshSources}
                       trigger={
                         <Button
                           variant="outline"
@@ -113,7 +127,7 @@ const RaceSources = () => {
                     <DeleteSourceButton
                       sourceId={source.id}
                       sourceName={source.name}
-                      onDeleted={fetchSources}
+                      onDeleted={refreshSources}
                     />
                   </div>
                 </div>

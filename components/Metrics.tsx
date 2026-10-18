@@ -96,9 +96,9 @@ const Metrics = () => {
     return Number((total / sortedStats.length).toFixed(1));
   }, [sortedStats]);
 
-  const totalTrackedFirstPicks = useMemo(() => {
-    return sortedStats.reduce((sum, stat) => sum + stat.totalPicks, 0);
-  }, [sortedStats]);
+  // const totalTrackedFirstPicks = useMemo(() => {
+  //   return sortedStats.reduce((sum, stat) => sum + stat.totalPicks, 0);
+  // }, [sortedStats]);
 
   const totalItmHits = useMemo(() => {
     return sortedStats.reduce((sum, stat) => sum + stat.itmHits, 0);

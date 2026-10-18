@@ -1,6 +1,6 @@
 // import { RaceData } from "@/types";
 
-import { BarChart2Icon, DatabaseIcon, FileSpreadsheetIcon, HomeIcon, TrophyIcon } from "lucide-react";
+import { BarChart2Icon, DatabaseIcon, FileSpreadsheetIcon, HomeIcon, Settings, TrophyIcon } from "lucide-react";
 
 export const sidebarLinks = [
     {
@@ -27,5 +27,12 @@ export const sidebarLinks = [
         icon: TrophyIcon, 
         route: '/league-pools', 
         label: 'League Pool',
+    },
+    {
+        icon: Settings, 
+        route: "/settings", 
+        label: "Settings"
     }
-]
+];
+
+export const MIN_PASSWORD_LENGTH = 10;

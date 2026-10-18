@@ -8,7 +8,12 @@ const guestOnlyRoutes = [
   "/sign-in",
 ];
 
-const authFlowRoutes: string[] = [];
+const authFlowRoutes: string[] = [
+  "/forgot-password",
+  "/reset-password",
+  "/email-verified",
+  "/email-change-approved",
+];
 
 const matchesRoute = (pathname: string, routes: string[]) => {
   return routes.some((route) => {

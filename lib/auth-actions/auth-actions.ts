@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "../auth";
 import { changeEmailSchema } from "../validations/settngs";
-import { changePasswordSchema } from "../validations/password";
+import { changePasswordSchema, setPasswordSchema } from "../validations/password";
 import { getPublicError, handleActionError } from "../actionError";
 import { getUserSession } from "./auth-helpers";
 
@@ -54,7 +54,16 @@ export const logoutUser = async () => {
 
 export const sendResetPasswordEmail = async ({email}: {email: string}) => {
   try {
-    const normalizedEmail = email.trim().toLowerCase();
+    const parsed = changeEmailSchema.safeParse({ email });
+    if (!parsed.success) {
+      return {
+        success: false as const,
+        code: "VALIDATION_ERROR" as const,
+        message: "Enter a valid email address."
+      };
+    }
+
+    const normalizedEmail = parsed.data.email.toLowerCase();
     const publicMessage = "If an eligible account exists for this email, a reset link has been sent.";
 
     const redirectTo = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password`;
@@ -66,6 +75,42 @@ export const sendResetPasswordEmail = async ({email}: {email: string}) => {
     return {success: true as const, message: publicMessage};
   } catch (error) {
     return handleActionError(error, "sendResetPasswordEmail");
+  }
+};
+
+export const resetUserPassword = async ({ token, newPassword, confirmPassword }: {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}) => {
+  try {
+    if (!token || token.length > 4096) {
+      return {
+        success: false as const,
+        code: "VALIDATION_ERROR" as const,
+        message: "Your password reset link is invalid or expired."
+      };
+    }
+
+    const parsed = setPasswordSchema.safeParse({ newPassword, confirmPassword });
+    if (!parsed.success) {
+      return {
+        success: false as const,
+        code: "VALIDATION_ERROR" as const,
+        message: parsed.error.issues[0]?.message ?? "Invalid password."
+      };
+    }
+
+    await auth.api.resetPassword({
+      body: { token, newPassword: parsed.data.newPassword }
+    });
+
+    return {
+      success: true as const,
+      message: "Password reset successfully."
+    };
+  } catch (error) {
+    return handleActionError(error, "resetUserPassword");
   }
 };
 

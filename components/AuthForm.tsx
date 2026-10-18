@@ -8,6 +8,7 @@ import { ArrowRight, Eye, EyeOff, Loader2, LockKeyhole, Mail, ShieldCheck } from
 import { Label } from "./ui/label";
 import { signInUser } from "@/lib/auth-actions/auth-actions";
 import Image from "next/image";
+import Link from "next/link";
 
 const AuthForm = () => {
   const router = useRouter();
@@ -112,6 +113,14 @@ const AuthForm = () => {
                 {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
               </button>
             </div>
+          </div>
+          <div className="flex justify-end">
+            <Link
+              href="/forgot-password"
+              className="text-sm font-medium text-blue-400 transition-colors hover:text-blue-300"
+            >
+              Forgot password?
+            </Link>
           </div>
 
           {error && (

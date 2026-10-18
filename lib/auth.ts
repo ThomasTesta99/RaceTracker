@@ -13,6 +13,7 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true, 
         disableSignUp: true, 
+        revokeSessionsOnPasswordReset: true,
         sendResetPassword: async ({user, url}) => {
             try {
                 await sendEmail({to: user.email, resetLink: url});

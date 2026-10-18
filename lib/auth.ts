@@ -4,6 +4,8 @@ import {drizzleAdapter} from "better-auth/adapters/drizzle"
 import * as schema from "@/database/auth-schema";
 import { nextCookies } from "better-auth/next-js";
 import { sendEmail, sendVerifiation } from "./email";
+import { MIN_PASSWORD_LENGTH } from "@/constants";
+import { createAuthRateHook } from "./auth-actions/auth-rate-hook";
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
@@ -13,6 +15,7 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true, 
         disableSignUp: true, 
+        minPasswordLength: MIN_PASSWORD_LENGTH,
         revokeSessionsOnPasswordReset: true,
         sendResetPassword: async ({user, url}) => {
             try {
@@ -57,6 +60,9 @@ export const auth = betterAuth({
                     })
                 }
             },
+    },
+    hooks: {
+        before: createAuthRateHook(),
     },
     plugins: [nextCookies()],
 

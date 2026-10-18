@@ -18,11 +18,8 @@ export const signInUser = async ({ email, password }: { email: string; password:
       success: true as const, 
       message: "User successfully logged in." 
     };
-  } catch {
-    return { 
-      success: false as const, 
-      message: "Invalid email or password." 
-    };
+  } catch(error) {
+    return handleActionError(error, "signInUser");
   }
 };
 

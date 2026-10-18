@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -26,13 +26,6 @@ const SourceDialog = ({ onSourceSaved, source, trigger }: CreateSourceProps) => 
   const [sourceName, setSourceName] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    if (open) {
-      setSourceName(source?.name ?? "");
-      setMessage("");
-    }
-  }, [open, source]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,11 +80,8 @@ const SourceDialog = ({ onSourceSaved, source, trigger }: CreateSourceProps) => 
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-
-        if (!next) {
-          setMessage("");
-          setSourceName("");
-        }
+        setSourceName(next ? source?.name ?? "" : "");
+        setMessage("");
       }}
     >
       <DialogTrigger asChild>

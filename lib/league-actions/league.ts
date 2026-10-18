@@ -3,9 +3,17 @@ import { db } from "@/database/drizzle";
 import { leaguePool, leaguePoolEntries } from "@/database/schema";
 import { NewLeaguePool, NewLeaguePoolEntry, UpdateLeaguePoolEntryInput } from "@/types";
 import { asc, eq } from "drizzle-orm";
+import { getUserSession } from "../auth-actions/auth-helpers";
 
 export const createLeaguePool = async (date: string) => {
     try {
+        const session = await getUserSession();
+        if(!session){
+          return {
+            success: false, 
+            message: "Unauthorized",
+          }
+        }
         const newLeaguePool: NewLeaguePool = {
             id: crypto.randomUUID(),
             date,
@@ -28,6 +36,13 @@ export const createLeaguePool = async (date: string) => {
 
 export const getLeaguePools = async () => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const pools = await db
       .select()
       .from(leaguePool)
@@ -53,6 +68,13 @@ export const getLeaguePools = async () => {
 
 export const getLeaguePoolById = async (id: string) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const [pool] = await db
       .select()
       .from(leaguePool)
@@ -85,46 +107,67 @@ export const getLeaguePoolById = async (id: string) => {
 };
 
 export const deleteLeaguePool = async (id: string) => {
-    try {
-        await db.delete(leaguePool).where(eq(leaguePool.id, id));
-        return {
-            success: true,
-        };
-    } catch (error) {
-        console.error(error);
-        return {
-            success: false,
-            message: error instanceof Error ? error.message : "There was an error deleting the league pool.",
-        };
+  try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
     }
+    await db.delete(leaguePool).where(eq(leaguePool.id, id));
+    return {
+        success: true,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+        success: false,
+        message: error instanceof Error ? error.message : "There was an error deleting the league pool.",
+    };
+  }
 }
 
 export const createLeaguePoolEntry = async (leaguePoolId: string, team: string, name: string) => {
-    try {
-        const newLeaguePoolEntry: NewLeaguePoolEntry = {
-            id: crypto.randomUUID(),
-            leaguePoolId,
-            team,
-            name,
-        };
-
-        const [result] = await db.insert(leaguePoolEntries).values(newLeaguePoolEntry).returning();
-
-        return {
-            success: true,
-            leaguePoolEntry: result,
-        }
-    } catch (error) {
-        console.error(error);
-        return {
-            success: false,
-            message: error instanceof Error ? error.message : "There was an error creating the league pool entry.",
-        };
+  try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
     }
+    const newLeaguePoolEntry: NewLeaguePoolEntry = {
+        id: crypto.randomUUID(),
+        leaguePoolId,
+        team,
+        name,
+    };
+
+    const [result] = await db.insert(leaguePoolEntries).values(newLeaguePoolEntry).returning();
+
+    return {
+        success: true,
+        leaguePoolEntry: result,
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+        success: false,
+        message: error instanceof Error ? error.message : "There was an error creating the league pool entry.",
+    };
+  }
 }
 
 export const getLeaguePoolEntries = async (leaguePoolId: string) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const entries = await db
       .select()
       .from(leaguePoolEntries)
@@ -154,6 +197,13 @@ export const editLeaguePoolEntry = async (
   values: UpdateLeaguePoolEntryInput
 ) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const [result] = await db
       .update(leaguePoolEntries)
       .set(values)
@@ -186,6 +236,13 @@ export const editLeaguePoolEntry = async (
 
 export const deleteLeaguePoolEntry = async (id: string) => {
   try {
+    const session = await getUserSession();
+    if(!session){
+      return {
+        success: false, 
+        message: "Unauthorized",
+      }
+    }
     const [result] = await db
       .delete(leaguePoolEntries)
       .where(eq(leaguePoolEntries.id, id))

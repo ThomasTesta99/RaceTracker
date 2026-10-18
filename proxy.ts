@@ -35,10 +35,12 @@ export async function proxy(req: NextRequest) {
   const hasSession = Boolean(data?.session);
 
   if (hasSession && isGuestOnlyRoute) {
+    console.log("[proxy] Redirecting authenticated user:", pathname, "-> /");
     return NextResponse.redirect(new URL("/", req.url));
   }
 
   if (!hasSession && !isGuestOnlyRoute) {
+    console.log("[proxy] Redirecting unauthenticated user:", pathname, "-> /sign-in");
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 

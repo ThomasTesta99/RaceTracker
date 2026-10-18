@@ -9,12 +9,15 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { changeUserPassword } from "@/lib/auth-actions/auth-actions";
 import { changePasswordSchema } from "@/lib/validations/password";
 import { MIN_PASSWORD_LENGTH } from "@/constants";
+import { useRouter } from "next/navigation";
 
 interface ChangePasswordDialogProps {
   onSuccess: (message: string) => void;
 }
 
 const ChangePasswordDialog = ({ onSuccess }: ChangePasswordDialogProps) => {
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -56,6 +59,7 @@ const ChangePasswordDialog = ({ onSuccess }: ChangePasswordDialogProps) => {
       setOpen(false);
       resetForm();
       onSuccess("Your password has been changed successfully. Other sessions have been signed out.");
+      router.refresh();
     } catch {
       setError("Unable to change your password. Please try again.");
     } finally {

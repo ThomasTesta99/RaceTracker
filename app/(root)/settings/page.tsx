@@ -1,11 +1,15 @@
-import { redirect } from "next/navigation";
 import { getUserSession } from "@/lib/auth-actions/auth-helpers";
 import AccountSettings from "@/components/AccountSettings";
 
 const SettingsPage = async () => {
   const session = await getUserSession();
-  if (!session?.user) redirect("/sign-in");
-
+  if(!session) {
+    return (
+      <div>
+        <h2>Unauthorized</h2>
+      </div>
+    )
+  }
   return (
     <AccountSettings
       user={{
